@@ -4,7 +4,9 @@
   "description": "Database project",
   "main": "index.js",
   "scripts": {
-    "start": "node server/app.js"
+    "start": "node server/app.js",
+    "dev": "webpack-dev-server --config server/webpack.config.js --content-base public/dev-client/ --hot",
+    "build": "NODE_ENV=production webpack --config server/webpack.config.js -p"
   },
   "author": "Jenwich Rattanayenjai",
   "license": "ISC",

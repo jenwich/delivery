@@ -10,6 +10,7 @@ app.listen(PORT, function() {
 
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../public/jade'));
+app.use('/js', express.static(path.resolve(__dirname, '../public/js')));
 
 app.use(function(req, res, next) {
     app.locals.pretty = true;
