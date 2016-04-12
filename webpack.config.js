@@ -21,10 +21,10 @@ var getEntry = function(entryPoints, debug) {
 };
 
 module.exports = {
-    context: path.join(__dirname, '../src'),
+    context: path.join(__dirname, './src'),
     entry: getEntry(entryPoints, debug),
     output: {
-        path: path.resolve(__dirname, '../public/js'),
+        path: path.resolve(__dirname, './public/js'),
         filename: '[name].js'
     },
     module: {
@@ -36,7 +36,7 @@ module.exports = {
                     presets: ['es2015', 'react']
                 },
                 include: [
-                    path.resolve(__dirname, '../src')
+                    path.resolve(__dirname, './src')
                 ],
                 exclude: /node_modules/,
             }

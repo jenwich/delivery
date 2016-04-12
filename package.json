@@ -4,19 +4,21 @@
   "description": "Database project",
   "main": "index.js",
   "scripts": {
-    "start": "node server/app.js",
-    "dev": "webpack-dev-server --config server/webpack.config.js --content-base public/dev-client/ --hot",
-    "build": "NODE_ENV=production webpack --config server/webpack.config.js -p"
+    "start": "node server/server.js",
+    "dev": "webpack-dev-server --config ./webpack.config.js --content-base public/dev-client/ --hot",
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js -p"
   },
   "author": "Jenwich Rattanayenjai",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",
     "jade": "^1.11.0",
+    "node-mysql": "^0.4.2",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-router": "^2.0.1",
     "redux": "^3.4.0",
+    "redux-thunk": "^2.0.1",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
