@@ -5,7 +5,7 @@ var debug = process.env.NODE_ENV !== "production";
 
 var entryPoints = {
     "index": ['./index.js'],
-    "second": ['./second.js']
+    "signin": ['./signin.js'],
 };
 
 var vendors = ['react'];
