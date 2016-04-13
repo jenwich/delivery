@@ -1,6 +1,7 @@
 
 var path = require('path');
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var secret = require('./secret');
@@ -27,6 +28,12 @@ app.use('/js', express.static(path.resolve(__dirname, '../public/js')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(session({
+    secret: 'sexykikisss',
+    saveUninitialized: true,
+    resave: true,
+}));
+
 app.use(function(req, res, next) {
     app.locals.pretty = true;
     next();
@@ -43,15 +50,47 @@ app.get('/', function(req, res) {
 });
 
 app.get('/signin', function(req, res) {
-    res.render('signin');
+    if (req.session.username) {
+        res.end("You already sign in.");
+    } else {
+        res.render('signin');
+    }
 });
 
+app.get('/customer', function(req, res) {
+    if (!req.session.username) {
+        res.end("You are not allow to see this page.");
+    } else {
+        res.render('customer', {
+            username: req.session.username
+        });
+    }
+});
+
+app.get('/signout', function(req, res) {
+    if (req.session.username) {
+        console.log(req.session.username, "logged out");
+        req.session.destroy(function() {
+            res.redirect('/signin')
+        });
+    } else {
+        res.redirect('/');
+    }
+})
+
 app.post('/signin/signin_req', function(req, res) {
-    console.log(req.body);
     connection.query(`SELECT * FROM Account WHERE username='${req.body.username}' AND password='${req.body.password}'`, function(err, rows) {
         if (!err) {
-            var message = rows.length? "success": "Username or password unmatch";
-            res.send({ message });
+            var message, redirect;
+            if (rows.length) {
+                message = "success";
+                redirect = "/" + rows[0].account_type;
+            } else {
+                message = "Username or password unmatch";
+            }
+            req.session.username = req.body.username;
+            console.log(req.session.username, "logged in");
+            res.send({ message, redirect });
         }
         res.end();
     });

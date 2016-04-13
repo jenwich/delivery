@@ -42,11 +42,15 @@ export function signin(username, password) {
                 },
                 method: 'POST',
                 body: JSON.stringify({ username, password }),
+                credentials: 'include'
             }).then((res) => {
                 if (res.status >= 400) throw new Error("Bad response from server");
                 return res.json();
             }).then((data) => {
-                if (data.message == 'success') dispatch(signinResponseSuccess());
+                if (data.message == 'success') {
+                    dispatch(signinResponseSuccess());
+                    window.location = data.redirect;
+                }
                 else dispatch(signinResponseFail(data.message));
             });
         }
