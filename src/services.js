@@ -1,6 +1,7 @@
 
 var pattern = {
-    username: /^[\w\d-]+$/i
+    username: /^[\w\d-]+$/i,
+    email: /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/i
 };
 
 var validation = {
@@ -15,4 +16,18 @@ var validation = {
     }
 };
 
-export { pattern, validation };
+var fetchOptions = function(data) {
+    var debug = process.env.NODE_ENV !== 'production';
+    var options = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data),
+    };
+    if (!debug) options.credentials = 'include';
+    return options;
+}
+
+export { pattern, validation, fetchOptions };

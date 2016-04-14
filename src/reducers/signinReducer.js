@@ -1,6 +1,8 @@
-import { combineReducers } from 'redux';
 
-function signinReducer(state = {}, action) {
+import { combineReducers } from 'redux';
+import { pattern } from '../services';
+
+export default function signinReducer(state = {}, action) {
     switch (action.type) {
         case 'SIGIN_INVALID_USERNAME': {
             return Object.assign({}, state, {
@@ -22,16 +24,6 @@ function signinReducer(state = {}, action) {
                 message: action.message
             });
         };
-        default:
-            return state;
+        default: return state;
     }
 }
-
-function registerReducer(state = {}, action) {
-    return state;
-}
-
-export default combineReducers({
-    signin: signinReducer,
-    register: registerReducer
-});

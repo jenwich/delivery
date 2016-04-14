@@ -6,6 +6,7 @@ var debug = process.env.NODE_ENV !== "production";
 var entryPoints = {
     "index": ['./index.js'],
     "signin": ['./signin.js'],
+    "register": ['./register.js'],
 };
 
 var vendors = ['react'];
@@ -21,7 +22,7 @@ var getEntry = function(entryPoints, debug) {
 };
 
 module.exports = {
-    context: path.join(__dirname, './src'),
+    context: path.join(__dirname, './src/entry'),
     entry: getEntry(entryPoints, debug),
     output: {
         path: path.resolve(__dirname, './public/js'),

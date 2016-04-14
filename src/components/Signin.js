@@ -1,10 +1,8 @@
+
 import React from 'react';
 import * as actions from '../actions/signinActions.js';
 
 export default class Signin extends React.Component {
-    constructor() {
-        super();
-    }
 
     componentWillMount() {
         this.setState(this.props.store.getState());
@@ -24,8 +22,9 @@ export default class Signin extends React.Component {
                 Username: <input type="text" ref="username" /><br />
                 Password: <input type="password" ref="password" /><br />
                 <button onClick={ this.submit.bind(this) }>Sign In</button>
-                <span>{ this.state.signin.message }</span>
+                <span>{ this.state.message }</span>
             </div>
         );
     }
+
 }

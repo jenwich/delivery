@@ -1,6 +1,6 @@
 
-import { validation } from '../utilities';
 import fetch from 'isomorphic-fetch';
+import { validation, fetchOptions, pattern } from '../services';
 
 export function signinInvaidUsername(message) {
     return {
@@ -35,15 +35,7 @@ export function signin(username, password) {
         if (message != 'pass') dispatch(signinInvaidUsername(message));
         else {
             dispatch(signinRequest(username, password));
-            return fetch('http://localhost:3000/signin/signin_req', {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify({ username, password }),
-                credentials: 'include'
-            }).then((res) => {
+            return fetch('http://localhost:3000/signin/signin_req', fetchOptions({ username, password })).then((res) => {
                 if (res.status >= 400) throw new Error("Bad response from server");
                 return res.json();
             }).then((data) => {
