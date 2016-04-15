@@ -25,6 +25,9 @@ connection.connect(function(err) {
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../public/jade'));
 app.use('/js', express.static(path.resolve(__dirname, '../public/js')));
+app.use('/css', express.static(path.resolve(__dirname, '../public/css')));
+app.use('/jquery', express.static(path.resolve(__dirname, '../node_modules/jquery/dist')));
+app.use('/bootstrap', express.static(path.resolve(__dirname, '../node_modules/bootstrap/dist')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -46,24 +49,42 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-    res.render('index');
+    res.render('index', {
+        username: req.session.username
+    });
+});
+
+app.get('/menus', function(req, res) {
+    res.render('menus', {
+        username: req.session.username
+    });
+});
+
+app.get('/stores', function(req, res) {
+    res.render('stores', {
+        username: req.session.username
+    });
+});
+
+app.get('/about', function(req, res) {
+    res.render('about', {
+        username: req.session.username
+    });
 });
 
 app.get('/signin', function(req, res) {
     if (req.session.username) {
-        res.end("You already sign in.");
+        res.redirect('/account');
     } else {
         res.render('signin');
     }
 });
 
-app.get('/customer', function(req, res) {
-    if (!req.session.username) {
-        res.end("You are not allow to see this page.");
+app.get('/signup', function(req, res) {
+    if (req.session.username) {
+        res.redirect('/account');
     } else {
-        res.render('customer', {
-            username: req.session.username
-        });
+        res.render('signup');
     }
 });
 
@@ -76,7 +97,17 @@ app.get('/signout', function(req, res) {
     } else {
         res.redirect('/');
     }
-})
+});
+
+app.get('/account', function(req, res) {
+    if (!req.session.username) {
+        res.redirect('/signin');
+    } else {
+        res.render(req.session.type, {
+            username: req.session.username,
+        });
+    }
+});
 
 app.post('/signin/signin_req', function(req, res) {
     connection.query(`SELECT * FROM Account WHERE username='${req.body.username}' AND password='${req.body.password}'`, function(err, rows) {
@@ -84,13 +115,16 @@ app.post('/signin/signin_req', function(req, res) {
             var message, redirect;
             if (rows.length) {
                 message = "success";
-                redirect = "/" + rows[0].account_type;
+                redirect = "/account";
+                req.session.type = rows[0].account_type;
+                req.session.username = req.body.username;
             } else {
                 message = "Username or password unmatch";
             }
-            req.session.username = req.body.username;
             console.log(req.session.username, "logged in");
             res.send({ message, redirect });
+        } else {
+            console.error(err);
         }
         res.end();
     });

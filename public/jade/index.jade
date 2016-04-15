@@ -1,8 +1,52 @@
-html
-    head
-        title Welcome
-    body
-        h1 Hello from Jade
-        div#app
-        script(type="text/javascript", src="/js/vendors.js")
-        script(type="text/javascript", src="/js/index.js")
+extends ./layouts/layout.jade
+
+block title
+    title Delivery
+
+block content
+    .jumbotron
+      .container
+        h1 Hello, world!
+        p
+          | This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+        p
+          a.btn.btn-primary.btn-lg(href='#', role='button') About us
+    .container-fluid
+      .row
+        .col-lg-12
+          h3 Recommend Menu
+      .row
+        .col-sm-6.col-md-4
+          .thumbnail
+            img(src='#', alt='...')
+            .caption
+              h3 Menu 1
+              p
+                | Menu description
+        .col-sm-6.col-md-4
+          .thumbnail
+            img(src='#', alt='...')
+            .caption
+              h3 Menu 2
+              p
+                | Menu description
+        .col-sm-6.col-md-4
+          .thumbnail
+            img(src='#', alt='...')
+            .caption
+              h3 Menu 3
+              p
+                | Menu description
+        .col-sm-6.col-md-4
+          .thumbnail
+            img(src='#', alt='...')
+            .caption
+              h3 Menu 4
+              p
+                | Menu description
+    .row
+        .col-lg-12 eiei
+
+block js
+    //- script(type="text/javascript", src="/js/vendors.js")
+    //- script(type="text/javascript", src="/js/index.js")

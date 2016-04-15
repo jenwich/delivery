@@ -1,7 +1,7 @@
-html
-    head
-        title Customer
-    body
-        h1 Welcome Customer, #{username}
-        p
-            a(href='/signout') Sign Out
+extends ./layouts/layout.jade
+
+block title
+    title My account
+
+block content
+    h1 Welcome, #{username}

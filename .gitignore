@@ -1,3 +1,4 @@
 node_modules/*
 server/secret.js
 public/js/*
+npm-debug.log
