@@ -8,6 +8,7 @@ var secret = require('./secret');
 
 var app = express();
 var connection = mysql.createConnection(secret.mysqlOptions);
+var query = require('./query')(connection);
 
 var PORT = 3000;
 
@@ -110,22 +111,34 @@ app.get('/account', function(req, res) {
 });
 
 app.post('/signin/signin_req', function(req, res) {
-    connection.query(`SELECT * FROM Account WHERE username='${req.body.username}' AND password='${req.body.password}'`, function(err, rows) {
-        if (!err) {
-            var message, redirect;
-            if (rows.length) {
-                message = "success";
-                redirect = "/account";
-                req.session.type = rows[0].account_type;
-                req.session.username = req.body.username;
-            } else {
-                message = "Username or password unmatch";
-            }
+    query.signin([req.body.username, req.body.password], function(rows) {
+        var message, redirect;
+        if (rows.length) {
+            message = "success";
+            redirect = "/account";
+            req.session.type = rows[0].account_type;
+            req.session.username = req.body.username;
             console.log(req.session.username, "logged in");
-            res.send({ message, redirect });
         } else {
-            console.error(err);
+            message = "Username or password unmatch";
         }
+        res.send({ message, redirect });
+    }, function(err) {
+        console.error(err);
         res.end();
     });
-})
+});
+
+app.post('/signup/req', function(req, res) {
+    query.signup(req.body, function() {
+        message = "success";
+        redirect = "/account";
+        req.session.type = 'customer';
+        req.session.username = req.body.username;
+        console.log(req.session.username, "registered");
+        res.send({ message, redirect });
+    }, function(err) {
+        console.log(err);
+        if (err.code == 'ER_DUP_ENTRY') res.end({ error: 'Duplicate username'})
+    });
+});
