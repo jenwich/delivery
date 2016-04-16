@@ -3,5 +3,11 @@ extends ./layouts/layout.jade
 block title
     title My account
 
+block nav-account
+    li.active
+      a(href='/account')
+        | My Account 
+        span.sr-only (current)
+
 block content
     h1 Welcome, #{username}

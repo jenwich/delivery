@@ -23,8 +23,9 @@ nav.navbar.navbar-inverse.navbar-default.navbar-fixed-top
                     li
                         p.navbar-text Welcome, 
                             b #{username}
-                    li
-                        a(href='/account') My Account
+                    block nav-account
+                        li
+                            a(href='/account') My Account
                     li
                         a(href='/signout') Sign out
             else 
