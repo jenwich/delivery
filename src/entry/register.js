@@ -38,7 +38,7 @@ var initialState = {
         value: "",
         valid: true
     },
-    addresses: [
+    address: [
         { id: 0, value: "" }
     ],
     message: ""

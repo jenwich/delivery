@@ -43,7 +43,7 @@ export default class Register extends React.Component {
                 E-mail: <input type="text" ref="email" onChange={ this.handleEmail.bind(this) }/> <span>{ this.state.email.message }</span><br />
                 FirstName: <input type="text" ref="firstName" onChange={ this.handleName.bind(this) }/><br />
                 LastName: <input type="text" ref="lastName" onChange={ this.handleName.bind(this) }/><br />
-                <RegisterAddressList list={ this.state.addresses } dispatch={ this.dispatch } />
+                <RegisterAddressList list={ this.state.address } dispatch={ this.dispatch } />
                 <button onClick={ this.handleSubmit.bind(this) }>Submit</button>
                 { this.state.message }
             </div>

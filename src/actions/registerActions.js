@@ -1,6 +1,5 @@
 
-import fetch from 'isomorphic-fetch';
-import { validation, fetchOptions, pattern } from '../services';
+import { validation, getFetch, pattern } from '../services';
 
 export function validateUsername(username) {
     return {
@@ -68,15 +67,15 @@ function registerRequest() {
     }
 }
 
-function registerRequestSuccess() {
+function registerResponseSuccess() {
     return {
-        type: 'REGISTER_REQUEST_SUCCESS'
+        type: 'REGISTER_RESPONSE_SUCCESS'
     }
 }
 
-function registerRequestFail(message) {
+function registerResponseFail(message) {
     return {
-        type: 'REGISTER_REQUEST_FAIL',
+        type: 'REGISTER_RESPONSE_FAIL',
         message
     }
 }
@@ -85,12 +84,25 @@ export function submit() {
     return (dispatch, getState) => {
         if (shouldSubmit(getState())) {
             dispatch(registerRequest());
-            setTimeout(() => {
-                dispatch(registerRequestSuccess());
-                setTimeout(() => {
-                    dispatch(registerRequestFail('Somethings wrong'));
-                }, 1000)
-            },1000)
+            var state = getState();
+            var data = {
+                username: state.username.value,
+                password: state.password.value,
+                email: state.email.value,
+                firstName: state.firstName.value,
+                lastName: state.lastName.value,
+                address: state.address.map(item => item.value).filter(item => item != "")
+            }
+            return getFetch('/signup/req', data).then(res => {
+                if (res.status >= 400) throw new Error("Bad response from server");
+                return res.json();
+            }).then(data => {
+                if (data.message == 'success') {
+                    dispatch(registerResponseSuccess());
+                    window.location = data.redirect;
+                }
+                else dispatch(registerResponseFail(data.message));
+            });
         } else {
             dispatch(messageInvalid());
         }

@@ -138,7 +138,11 @@ app.post('/signup/req', function(req, res) {
         console.log(req.session.username, "registered");
         res.send({ message, redirect });
     }, function(err) {
-        console.log(err);
-        if (err.code == 'ER_DUP_ENTRY') res.end({ error: 'Duplicate username'})
+        console.error(err);
+        if (err.code == 'ER_DUP_ENTRY') {
+            res.send({ message: "Some fields are duplicate" });
+        } else {
+            res.end();
+        }
     });
 });

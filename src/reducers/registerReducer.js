@@ -52,15 +52,15 @@ function nameValidate(firstName, lastName) {
     };
 }
 
-function addAddress(addresses, id) {
+function addAddress(address, id) {
     return {
-        addresses: [...addresses, { id, value: "" }]
+        address: [...address, { id, value: "" }]
     };
 }
 
-function changeAddress(addresses, index, value) {
+function changeAddress(address, index, value) {
     return {
-        addresses: addresses.map((item, i) => {
+        address: address.map((item, i) => {
             item = Object.assign({}, item, {});
             if (i == index) item.value = value;
             return item;
@@ -68,9 +68,9 @@ function changeAddress(addresses, index, value) {
     };
 }
 
-function deleteAddress(addresses, index) {
+function deleteAddress(address, index) {
     return {
-        addresses: addresses.filter((item, i) => {
+        address: address.filter((item, i) => {
             return i != index;
         })
     };
@@ -97,13 +97,13 @@ export default function registerReducer(state = {}, action) {
             return Object.assign({}, state, nameValidate(action.firstName, action.lastName));
         };
         case 'ADD_ADDRESS': {
-            return Object.assign({}, state, addAddress(state.addresses, action.id));
+            return Object.assign({}, state, addAddress(state.address, action.id));
         };
         case 'CHANGE_ADDRESS': {
-            return Object.assign({}, state, changeAddress(state.addresses, action.index, action.value));
+            return Object.assign({}, state, changeAddress(state.address, action.index, action.value));
         };
         case 'DELETE_ADDRESS': {
-            return Object.assign({}, state, deleteAddress(state.addresses, action.index));
+            return Object.assign({}, state, deleteAddress(state.address, action.index));
         };
         case 'MESSAGE_INVALID': {
             return Object.assign({}, state, sendMessage("Some fields invalid"));
@@ -111,10 +111,10 @@ export default function registerReducer(state = {}, action) {
         case 'REGISTER_REQUEST': {
             return Object.assign({}, state, sendMessage("Loading"));
         };
-        case 'REGISTER_REQUEST_SUCCESS': {
+        case 'REGISTER_RESPONSE_SUCCESS': {
             return Object.assign({}, state, sendMessage("Success"));
         };
-        case 'REGISTER_REQUEST_FAIL': {
+        case 'REGISTER_RESPONSE_FAIL': {
             return Object.assign({}, state, sendMessage(action.message));
         };
         default: return state;

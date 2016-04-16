@@ -1,6 +1,5 @@
 
-import fetch from 'isomorphic-fetch';
-import { validation, fetchOptions, pattern } from '../services';
+import { validation, getFetch, pattern } from '../services';
 
 export function signinInvaidUsername(message) {
     return {
@@ -35,8 +34,7 @@ export function signin(username, password) {
         if (message != 'pass') dispatch(signinInvaidUsername(message));
         else {
             dispatch(signinRequest(username, password));
-            var host = (process.env.NODE_ENV !== 'production')? 'http://localhost:3000': '';
-            return fetch(host + '/signin/signin_req', fetchOptions({ username, password })).then((res) => {
+            return getFetch('/signin/signin_req', { username, password }).then((res) => {
                 if (res.status >= 400) throw new Error("Bad response from server");
                 return res.json();
             }).then((data) => {
