@@ -4,8 +4,13 @@ block title
     title Sign in
 
 block content
-    h1 Sign In
-    div#signin
+    .container
+        .row(style="margin-top: 20px")
+            .col-md-6.col-md-offset-3
+                h2 Sign In
+                .panel.panel-default
+                    .panel-body
+                        #signin
 
 block js
     script(type="text/javascript", src="/js/vendors.js")

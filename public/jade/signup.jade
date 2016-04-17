@@ -4,8 +4,13 @@ block title
     title Sign up
 
 block content
-    h1 Sign up
-    div#register
+    .container
+        .row(style="margin-top: 20px")
+            .col-md-8.col-md-offset-2
+                h2 Sign Up
+                .panel.panel-default
+                    .panel-body
+                        #register
 
 block js
     script(type="text/javascript", src="/js/vendors.js")
