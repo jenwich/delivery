@@ -3,25 +3,15 @@ var path = require('path');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
 var secret = require('./secret');
-
+var query = require('./query')(secret.mysqlConfig);
 var app = express();
-var connection = mysql.createConnection(secret.mysqlOptions);
-var query = require('./query')(connection);
 
-var PORT = 3000;
+const PORT = 3000;
 
 app.listen(PORT, function() {
     console.log("Listening PORT", PORT);
 });
-
-connection.connect(function(err) {
-    if (err) console.log(err);
-    else {
-        console.log("Database connected");
-    }
-})
 
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../public/jade'));
