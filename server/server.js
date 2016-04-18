@@ -4,7 +4,9 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var secret = require('./secret');
-var query = require('./query')(secret.mysqlConfig);
+
+require('./models/db').createConnection(secret.mysqlConfig);
+
 var app = express();
 
 const PORT = 3000;
@@ -21,118 +23,16 @@ app.use('/jquery', express.static(path.resolve(__dirname, '../node_modules/jquer
 app.use('/bootstrap', express.static(path.resolve(__dirname, '../node_modules/bootstrap/dist')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(session({
     secret: secret.session,
     saveUninitialized: true,
     resave: true,
 }));
-
 app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     app.locals.pretty = true;
     next();
 });
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-app.get('/', function(req, res) {
-    res.render('index', {
-        username: req.session.username
-    });
-});
-
-app.get('/menus', function(req, res) {
-    res.render('menus', {
-        username: req.session.username
-    });
-});
-
-app.get('/stores', function(req, res) {
-    res.render('stores', {
-        username: req.session.username
-    });
-});
-
-app.get('/about', function(req, res) {
-    res.render('about', {
-        username: req.session.username
-    });
-});
-
-app.get('/signin', function(req, res) {
-    if (req.session.username) {
-        res.redirect('/account');
-    } else {
-        res.render('signin');
-    }
-});
-
-app.get('/signup', function(req, res) {
-    if (req.session.username) {
-        res.redirect('/account');
-    } else {
-        res.render('signup');
-    }
-});
-
-app.get('/signout', function(req, res) {
-    if (req.session.username) {
-        console.log(req.session.username, "logged out");
-        req.session.destroy(function() {
-            res.redirect('/signin')
-        });
-    } else {
-        res.redirect('/');
-    }
-});
-
-app.get('/account', function(req, res) {
-    if (!req.session.username) {
-        res.redirect('/signin');
-    } else {
-        res.render(req.session.type, {
-            username: req.session.username,
-        });
-    }
-});
-
-app.post('/signin/signin_req', function(req, res) {
-    query.signin([req.body.username, req.body.password], function(rows) {
-        var message, redirect;
-        if (rows.length) {
-            message = "success";
-            redirect = "/account";
-            req.session.type = rows[0].account_type;
-            req.session.username = req.body.username;
-            console.log(req.session.username, "logged in");
-        } else {
-            message = "Username or password unmatch";
-        }
-        res.send({ message, redirect });
-    }, function(err) {
-        console.error(err);
-        res.end();
-    });
-});
-
-app.post('/signup/req', function(req, res) {
-    query.signup(req.body, function() {
-        message = "success";
-        redirect = "/account";
-        req.session.type = 'customer';
-        req.session.username = req.body.username;
-        console.log(req.session.username, "registered");
-        res.send({ message, redirect });
-    }, function(err) {
-        console.error(err);
-        if (err.code == 'ER_DUP_ENTRY') {
-            res.send({ message: "Some fields are duplicate" });
-        } else {
-            res.end();
-        }
-    });
-});
+app.use('/', require('./router/index'));

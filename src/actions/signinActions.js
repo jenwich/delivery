@@ -34,7 +34,7 @@ export function signin(username, password) {
         if (message != 'pass') dispatch(signinInvaidUsername(message));
         else {
             dispatch(signinRequest(username, password));
-            return getFetch('/signin/signin_req', { username, password }).then((res) => {
+            return getFetch('/signin/req', { username, password }).then((res) => {
                 if (res.status >= 400) throw new Error("Bad response from server");
                 return res.json();
             }).then((data) => {
