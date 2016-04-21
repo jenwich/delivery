@@ -13,6 +13,7 @@ router.use('/about', require('./about'));
 router.use('/account', require('./account'))
 router.use('/signin', require('./signin'));
 router.use('/signup', require('./signup'));
+router.use('/api', require('./api'));
 
 router.get('/signout', function(req, res) {
     if (req.session.username) {

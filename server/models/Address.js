@@ -2,9 +2,6 @@
 var connection = require('./db').connection();
 
 module.exports = {
-    insert: function(values, callback) {
-        connection.query('INSERT INTO Address VALUE (?, 0)', values, callback);
-    },
     insertMultiple: function(values, callback) {
         var sql = 'INSERT INTO Address(username, address_value) VALUES ';
         values.address.forEach(function(item, index) {
