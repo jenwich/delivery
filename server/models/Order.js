@@ -1,9 +1,9 @@
 var connection = require('./db').connection();
 
-const LOAD_ORDER = `SELECT * FROM Customer_Order WHERE id = ?`;
+const LOAD_ORDER = `SELECT * FROM Order_ WHERE order_id = ?`;
 
-const LOAD_MENU =
-    `SELECT menu_id AS id, amount, score, comment FROM Order_Menu WHERE order_id = ?`;
+const LOAD_MENUS =
+    `SELECT menu_id, amount FROM Order_Menu WHERE order_id = ?`;
 
 const CREATE_ORDER =
     `INSERT INTO Customer_Order VALUES (?, ?, ?, ?)`;
@@ -16,7 +16,7 @@ function loadOne(id, callback) {
 }
 
 function loadMenus(id, callback) {
-    connection.query(LOAD_MENU, [id], callback);
+    connection.query(LOAD_MENUS, [id], callback);
 }
 
 function loadOneWithMenus(id, callback) {
