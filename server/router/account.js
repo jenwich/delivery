@@ -1,12 +1,16 @@
 
 var router = require('express').Router();
+var Customer = require('../models/Customer');
 
 router.get('/', function(req, res) {
     if (!req.session.username) {
         res.redirect('/signin');
     } else {
-        res.render(req.session.type, {
-            username: req.session.username,
+        Customer.loadAccountWithAddress(req.session.username, function(err, data) {
+            res.render('account', {
+                username: req.session.username,
+                user: data
+            });
         });
     }
 })
