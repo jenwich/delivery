@@ -1,4 +1,6 @@
 
+import { getFetch } from '../../services';
+
 const PREFIX = 'ORDER/CART/';
 const UPDATE = PREFIX + 'UPDATE';
 
@@ -21,12 +23,23 @@ window.updateCart = updateCart;
 
 export function removeMenu(menu_id) {
     return (dispatch) => {
-        console.log("remove", menu_id);
+        return getFetch('/menus/decrease_cart', {menu_id}).then(res => {
+            if (res.status >= 400) throw new Error("Bad response from server");
+            return res.json();
+        }).then(data => {
+            dispatch(updateCart(data));
+        });
     }
 }
 
 export function purchase() {
-    return (dispatch) => {
-        console.log("purchase");
+    return (dispatch, getState) => {
+        var address = getState().address;
+        return getFetch('/menus/purchase', {address}).then(res => {
+            if (res.status >= 400) throw new Error("Bad response from server");
+            return res.json();
+        }).then(data => {
+            console.log(data)
+        });
     }
 }

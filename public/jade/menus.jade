@@ -3,8 +3,42 @@ extends ./layouts/layout.jade
 block title
     title Delivery - Menus
 
+block js
+    script(type="text/javascript", src="/js/vendors.js")
+    script(type="text/javascript", src="/js/order.js")
+
 block nav-menus
     li.active
       a(href='/menus')
         | Menus 
         span.sr-only (current)
+
+block content
+    .container
+        .row
+            .col-md-12
+                h1 Menus
+        .row
+            .col-md-8
+                .row
+                    .col-md-2
+                        label(for="storeSelector")
+                            h4 Store
+                    .col-md-10
+                        #store
+                .row(style="margin-top:20px;")
+                    .col-md-2
+                        h4 Category
+                    .col-md-10
+                        #category
+                .row(style="margin-top:20px;")
+                    .col-md-12
+                        #menu    
+            .col-md-4
+                .row
+                    .col-md-12
+                        .panel.panel-primary
+                            .panel-heading
+                                h3.panel-title Cart
+                            #cart
+                            #address

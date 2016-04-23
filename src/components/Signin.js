@@ -22,7 +22,7 @@ export default class Signin extends React.Component {
                 <div className="form-group">
                     <label className="col-sm-2 control-label" for="inputUsername">Username</label>
                     <div className="col-sm-10">
-                        <input id="inputUsername" ref="username" className="form-control" type="text" placeholder="Username" />
+                        <input id="inputUsername" ref="username" className="form-control" type="text" />
                     </div>
                 </div>
                 <div className="form-group">

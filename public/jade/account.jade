@@ -1,8 +1,5 @@
 extends ./layouts/layout.jade
 
-block title
-    title My account
-
 block nav-account
     li.active
       a(href='/account')
@@ -10,4 +7,43 @@ block nav-account
         span.sr-only (current)
 
 block content
-    h1 Welcome, #{username}
+    .container
+        .row
+            .col-md-12
+                h1#page-title Welcome, #{username}
+        .row
+            .col-md-3 
+                block account-sidebar
+                .panel.panel-default
+                    .panel-heading
+                        h3.panel-title My Profile
+                    .panel-body
+                        p 
+                            b Username
+                            br
+                            span #{username}
+                        p
+                            b Name
+                            br
+                            span #{user.firstname} #{user.lastname}
+                        p
+                            b Email
+                            br
+                            span #{user.email}
+                        p
+                            b Address
+                            br
+                            ol: for address in user.address
+                                li #{address.value}
+                        p
+                            a.btn.btn-default(href="/account/edit") Edit Account
+            .col-md-9 
+                p content
+
+block title
+    title My Account
+
+block account-sidebar
+    .list-group
+        a.list-group-item(class=(page == 'order' || page == 'index')? "active": "", href="/account/order") Order
+        a.list-group-item(class=(page == 'history')? "active": "", href="/account/history") History

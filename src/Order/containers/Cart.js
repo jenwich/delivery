@@ -24,7 +24,7 @@ export default class Cart extends React.Component {
             <table className="table">
                 <tbody>
                     {
-                        this.state.cart.menus.map(menu => {
+                        this.state.cart.menus.map((menu) => {
                             return (
                                 <tr key={menu.menu_id}>
                                     <td width="">{menu.name}</td>
@@ -40,16 +40,16 @@ export default class Cart extends React.Component {
                         })
                     }
                     <tr>
-                        <td width="" colspan="2">Total</td>
-                        <td width="" colspan="2">${this.state.cart.total}</td>
+                        <td colSpan="2">Total</td>
+                        <td colSpan="2">${this.state.cart.total}</td>
                     </tr>
                     <tr>
-                        <td width="" colspan="2">Discount</td>
-                        <td width="" colspan="2">${this.state.cart.discount}</td>
+                        <td colSpan="2">Discount</td>
+                        <td colSpan="2">${this.state.cart.discount}</td>
                     </tr>
                     <tr>
-                        <td width="" colspan="2">Summary</td>
-                        <td width="" colspan="2">${this.state.cart.summary}</td>
+                        <td colSpan="2">Summary</td>
+                        <td colSpan="2">${this.state.cart.summary}</td>
                     </tr>
                 </tbody>
             </table>

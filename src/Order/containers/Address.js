@@ -43,7 +43,7 @@ export default class Address extends React.Component {
                     <select id="addressSelector" ref="selector" className="form-control" onChange={this.handleChange.bind(this)}>
                         {
                             this.props.address.map((item, index) => {
-                                return <option key={item.address_id} value={index}>{item.value}</option>
+                                return <option key={index} value={index}>{item.value}</option>
                             })
                         }
                         <option value={this.props.address.length}>Custom</option>
