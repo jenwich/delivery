@@ -1,0 +1,54 @@
+extends ./layouts/layout.jade
+
+block title
+    title Delivery - Stores
+
+block nav-stores
+    li.active
+      a(href='/stores')
+        | Stores 
+        span.sr-only (current)
+
+block content
+    .container
+        h1 #{data.name}
+        .panel.panel-default
+            .panel-body.row
+                .col-md-4
+                    .thumbnail
+                        img(src="/img/menu_#{data.menu_id}.jpg", alt="aaa")
+                .col-md-8
+                    h3 #{data.name}
+                    p: big #{data.description}
+                    p: big: b Price: $#{data.price}
+        .panel.panel-default
+            .panel-body
+                h3(style="margin-bottom:20px;") Review
+                for item in reviews
+                    .row(style="margin-bottom:10px;")
+                        .col-md-2
+                            p
+                                big: b #{item.firstname} #{item.lastname}
+                        .col-md-10
+                            p
+                                big #{item.score} / 5
+                                br
+                                span #{item.comment}
+                .row(style="margin-top:20px;")
+                    .col-md-2
+                        p
+                            big: b Write your review
+                    .col-md-10
+                        form(method="POST", action="/stores/#{data.store_id}/menu/#{data.menu_id}/menu_review")
+                            .form-group
+                                label(for="score") Score: &nbsp;
+                                select#score.form-control(name="score", style="width: auto; display:inline;")
+                                    option(value="1") 1 / 5
+                                    option(value="2") 2 / 5
+                                    option(value="3") 3 / 5
+                                    option(value="4") 4 / 5
+                                    option(value="5", selected="selected") 5 / 5
+                            .form-group
+                                textarea.form-control(rows="4", name="comment", placeholder="Write your comment...")
+                            .form-group
+                                button.btn.btn-success(type="submit") Send

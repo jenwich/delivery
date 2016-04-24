@@ -5,6 +5,8 @@ var Menu = require('../models/Menu');
 var Store = require('../models/Store');
 var Order = require('../models/Order');
 var Cart = require('../models/Cart');
+var Store_Review = require('../models/Store_Review');
+var Menu_Review = require('../models/Menu_Review');
 
 router.get('/', function(req, res) {
 
@@ -192,6 +194,38 @@ router.post('/cart/remove', function(req, res) {
 
 router.post('/manager/signin', function(req, res) {
     console.log(req.body)
+})
+
+router.post('/storereview/store', function(req, res) {
+    Store_Review.loadByStore(req.body.store_id, function(err, rows) {
+        if (!err) {
+            res.send(rows);
+        } else console.error(err);
+    });
+})
+
+router.post('/storereview/insert', function(req, res) {
+    Store_Review.insertReview(req.body, function(err, rows) {
+        if (!err) {
+            res.send(rows);
+        } else console.error(err);
+    });
+})
+
+router.post('/menureview/menu', function(req, res) {
+    Menu_Review.loadByMenu(req.body.menu_id, function(err, rows) {
+        if (!err) {
+            res.send(rows);
+        } else console.error(err);
+    });
+})
+
+router.post('/menureview/insert', function(req, res) {
+    Menu_Review.insertReview(req.body, function(err, rows) {
+        if (!err) {
+            res.send(rows);
+        } else console.error(err);
+    });
 })
 
 module.exports = router;

@@ -8,3 +8,24 @@ block nav-stores
       a(href='/stores')
         | Stores 
         span.sr-only (current)
+
+block content
+    .container
+        h1 Stores
+        .panel.panel-default
+            for item in data
+                .panel-body.row
+                    .col-md-4
+                        .thumbnail
+                            img(src="/img/store_#{item.store_id}.jpg", alt="aaa")
+                    .col-md-8
+                        h3 #{item.name}
+                        p: big #{item.description}
+                        p: big
+                            b Address:
+                            span  #{item.address}
+                        p: big
+                            b Open:
+                            span  #{item.open}
+                        p
+                            a.btn.btn-primary(href="/stores/#{item.store_id}") View Store

@@ -4,7 +4,7 @@ var Menu = require('./Menu');
 
 const LOAD_ONE = 'SELECT * FROM Store WHERE store_id = ?';
 
-const LOAD_ALL = 'SELECT store_id, name FROM Store';
+const LOAD_ALL = 'SELECT * FROM Store';
 
 const CHECK_ACCOUNT = 'SELECT * FROM Store WHERE username = ? AND password = ?';
 
@@ -26,7 +26,6 @@ function loadOneWithMenus(store_id, callback)  {
             if (data) {
                 Menu.loadByStore(store_id, function(err, rows) {
                     if (!err) {
-                        console.log(data)
                         data.menus = rows;
                         callback(err, data);
                     } else callback(err);
