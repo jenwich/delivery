@@ -9,6 +9,7 @@ var entryPoints = {
     "register": ['./register.js'],
     "order": ['../Order/index.js'],
     "customerOrder": ['../CustomerOrder/index.js'],
+    "managerOrder": ['../ManagerOrder/index.js'],
 };
 
 var vendors = ['react'];

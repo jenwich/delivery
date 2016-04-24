@@ -7,13 +7,13 @@ block content
     .container
         .row
             .col-md-12
-                h1 Welcome, store
+                h1 Manager Page - #{name}
         .row
             .col-md-3
                 .list-group
-                    a.list-group-item(href="#") Order
-                    a.list-group-item(href="#") Menus
-                    a.list-group-item(href="#") Coupon
+                    a.list-group-item(href="/manager/view/order") Order
+                    a.list-group-item(href="/manager/view/menus") Menus
+                    a.list-group-item(href="/manager/view/coupon") Coupon
             .col-md-9
-                p asdfasd
+                block manager-content
                 

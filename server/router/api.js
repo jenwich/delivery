@@ -114,6 +114,13 @@ router.post('/order/customer', function(req, res) {
     });
 })
 
+router.post('/order/store', function(req, res) {
+    Order.loadByStore(req.body.store_id, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
 router.post('/order/cook', function(req, res) {
     Order.cookOrder(req.body.order_id, function(err, data) {
         if (err) console.error(err);
