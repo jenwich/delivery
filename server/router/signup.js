@@ -3,9 +3,15 @@ var router = require('express').Router();
 var Customer = require('../models/Customer');
 
 router.get('/', function(req, res) {
-    res.render('signup', {
-        username: req.session.username
-    });
+    if (req.session.username) {
+        res.redirect('/account');
+    } else if (req.session.store_id) {
+        res.redirect('/manager');
+    } else {
+        res.render('signup', {
+            username: req.session.username
+        });
+    }
 })
 
 router.post('/req', function(req, res) {

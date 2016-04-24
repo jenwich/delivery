@@ -6,7 +6,9 @@ var Menu = require('../models/Menu');
 var Coupon = require('../models/Coupon');
 
 router.get('/', function(req, res) {
-    if (!req.session.store_id) {
+    if (req.session.username) {
+       res.redirect('/');
+    } else if (!req.session.store_id) {
         res.render('manager', {
             username: req.session.username
         });
