@@ -44,7 +44,7 @@ router.post('/:store_id/store_review', function(req, res) {
     }
 })
 
-router.get('/:store_id/menu/:menu_id', function(req, res) {
+router.get('/menu/:menu_id', function(req, res) {
     Menu.loadOne(req.params.menu_id, function(err, data) {
         Menu_Review.loadByMenu(req.params.menu_id, function(err, rows) {
             res.render('stores-menu', {
@@ -56,7 +56,7 @@ router.get('/:store_id/menu/:menu_id', function(req, res) {
     })
 })
 
-router.post('/:store_id/menu/:menu_id/menu_review', function(req, res) {
+router.post('/menu/:menu_id/menu_review', function(req, res) {
     if (req.session.username) {
         var data = {
             menu_id: parseInt(req.params.menu_id),
@@ -66,7 +66,7 @@ router.post('/:store_id/menu/:menu_id/menu_review', function(req, res) {
         };
         Menu_Review.insertReview(data, function(err) {
             if (!err) {
-                res.redirect('/stores/' + req.params.store_id + '/menu/' + req.params.menu_id );
+                res.redirect('/stores/menu/' + req.params.menu_id );
             } else console.error(err);
         })
     } else {

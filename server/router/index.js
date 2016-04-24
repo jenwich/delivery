@@ -1,9 +1,13 @@
 
 var router = require('express').Router();
+var Menu_Review = require('../models/Menu_Review')
 
 router.get('/', function(req, res) {
-    res.render('index', {
-        username: req.session.username
+    Menu_Review.getPopularMenus(function(err, data) {
+        res.render('index', {
+            username: req.session.username,
+            menus: data
+        });
     });
 })
 

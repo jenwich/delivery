@@ -39,7 +39,7 @@ block content
                         p
                             big: b Write your review
                     .col-md-10
-                        form(method="POST", action="/stores/#{data.store_id}/menu/#{data.menu_id}/menu_review")
+                        form(method="POST", action="/stores/menu/#{data.menu_id}/menu_review")
                             .form-group
                                 label(for="score") Score: &nbsp;
                                 select#score.form-control(name="score", style="width: auto; display:inline;")

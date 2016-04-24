@@ -229,6 +229,14 @@ router.post('/menureview/insert', function(req, res) {
     });
 })
 
+router.post('/menureview/sum', function(req, res) {
+    Menu_Review.getPopularMenus(function(err, rows) {
+        if (!err) {
+            res.send(rows);
+        } else console.error(err);
+    });
+})
+
 router.post('/coupon/load', function(req, res) {
     Coupon.loadByStore(req.body.store_id, function(err, rows) {
         if (!err) {

@@ -12,39 +12,32 @@ block content
             p
                 a.btn.btn-primary.btn-lg(href='/about', role='button') About us
     .container
-        .row
-            .col-lg-12
+        .row(style="margin-bottom: 10px;")
+            .col-md-12
                 h3 Recommend Menu
-        .row
-            .col-sm-6.col-md-4
-                .thumbnail
-                    img(src='#', alt='...')
-                    .caption
-                        h3 Menu 1
-                        p
-                            | Menu description
-            .col-sm-6.col-md-4
-                .thumbnail
-                    img(src='#', alt='...')
-                    .caption
-                        h3 Menu 2
-                        p
-                            | Menu description
-            .col-sm-6.col-md-4
-                .thumbnail
-                    img(src='#', alt='...')
-                    .caption
-                        h3 Menu 3
-                        p
-                            | Menu description
-            .col-sm-6.col-md-4
-                .thumbnail
-                    img(src='#', alt='...')
-                    .caption
-                        h3 Menu 4
-                        p
-                            | Menu description
-
-block js
-    //- script(type="text/javascript", src="/js/vendors.js")
-    //- script(type="text/javascript", src="/js/index.js")
+        .panel.panel-default
+            .panel-body
+                for menu in menus
+                    .row
+                        .col-md-3
+                            .thumbnail
+                                a(href="/stores/menu/#{menu.menu_id}")
+                                    img(src='/img/menu_#{menu.menu_id}.jpg')
+                        .col-md-7
+                            h3 #{menu.menu_name}
+                            p #{menu.description}
+                            p
+                                big
+                                    b Store: 
+                                    span: a(href="/stores/#{menu.store_id}") #{menu.store_name}
+                            p
+                                big
+                                    b Price: 
+                                    span  $#{menu.price}
+                        .col-md-2
+                            p
+                                h3(style="text-align: right")
+                                    small SCORE &nbsp;&nbsp;
+                                    span #{menu.score} of 5
+                                    br
+                                    small FROM #{menu.count} PEOPLE

@@ -1,6 +1,7 @@
 
 var connection = require('./db').connection();
 var Customer = require('./Customer');
+var Menu = require('./Menu');
 
 const LOAD_BY_MENU =
     `SELECT menu_id, customer, score, comment, firstname, lastname
@@ -27,8 +28,25 @@ function insertReview(values, callback) {
     connection.query(INSERT, arr, callback);
 }
 
+const SUM_OF_MENUS =
+    `SELECT Menu.menu_id, Store.store_id, Menu.name AS menu_name, Store.name AS store_name, Menu.description, price, score, count FROM Menu
+    INNER JOIN (
+        SELECT menu_id, SUM(score)/COUNT(*) AS score, COUNT(*) AS count FROM Menu_Review
+        GROUP BY menu_id
+        ORDER BY score DESC
+        LIMIT 10
+    ) AS Review
+    ON Menu.menu_id = Review.menu_id
+    INNER JOIN Store
+    ON Store.store_id = Menu.Store_id`
+
+function getPopularMenus(callback) {
+    connection.query(SUM_OF_MENUS, callback);
+}
+
 module.exports = {
     loadByMenu,
     loadByCustomer,
-    insertReview
+    insertReview,
+    getPopularMenus
 }
