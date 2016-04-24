@@ -34,12 +34,23 @@ export function removeMenu(menu_id) {
 
 export function purchase() {
     return (dispatch, getState) => {
-        var address = getState().address;
-        return getFetch('/menus/purchase', {address}).then(res => {
-            if (res.status >= 400) throw new Error("Bad response from server");
-            return res.json();
-        }).then(data => {
-            console.log(data)
-        });
+        var state = getState();
+        var address = state.address;
+        if (state.cart.menus.length == 0) {
+            window.alert("Please choose some products");
+        } else if (address == "") {
+            window.alert("Please choose your address");
+        } else {
+            return getFetch('/menus/purchase', {address}).then(res => {
+                if (res.status >= 400) throw new Error("Bad response from server");
+                return res.json();
+            }).then(data => {
+                if (data.message == 'success') {
+                    window.location = data.redirect
+                } else {
+                    window.alert(data.message)
+                }
+            });
+        }
     }
 }

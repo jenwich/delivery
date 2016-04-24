@@ -107,6 +107,22 @@ router.post('/order/load', function(req, res) {
     });
 })
 
+router.post('/order/create', function(req, res) {
+    Order.createOrder(req.body, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
+router.post('/cart/store', function(req, res) {
+    Cart.getStoreOfCart(req.body.customer, function(err, rows) {
+        if (err) console.error(err);
+        else {
+            res.send(rows);
+        }
+    });
+})
+
 router.post('/cart/load', function(req, res) {
     Cart.loadOneCustomerWithMenuName(req.body.customer, function(err, rows) {
         if (err) console.error(err);
@@ -126,6 +142,10 @@ router.post('/cart/remove', function(req, res) {
         if (err) console.error(err);
         else res.send(rows);
     });
+})
+
+router.post('/manager/signin', function(req, res) {
+    console.log(req.body)
 })
 
 module.exports = router;

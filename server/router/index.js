@@ -10,7 +10,8 @@ router.get('/', function(req, res) {
 router.use('/menus', require('./menus'));
 router.use('/stores', require('./stores'));
 router.use('/about', require('./about'));
-router.use('/account', require('./account'))
+router.use('/account', require('./account'));
+router.use('/manager', require('./manager'));
 router.use('/signin', require('./signin'));
 router.use('/signup', require('./signup'));
 router.use('/api', require('./api'));

@@ -22,6 +22,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jade": "^1.11.0",
     "jquery": "^2.2.3",
+    "moment": "^2.13.0",
     "node-mysql": "^0.4.2",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

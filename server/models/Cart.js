@@ -4,7 +4,16 @@ var Menu = require('./Menu');
 
 const LOAD_ONE = 'SELECT * FROM Cart WHERE customer = ? AND menu_id = ?'
 
-const LOAD_ONE_CUSTOMER = 'SELECT menu_id, amount FROM Cart WHERE customer = ?';
+const LOAD_ONE_CUSTOMER =
+    `SELECT Cart.menu_id, name, price, amount FROM Cart INNER JOIN Menu
+    ON Cart.menu_id = Menu.menu_id
+    WHERE Cart.customer = ?`;
+
+const LOAD_STORE =
+    `SELECT store_id FROM Cart INNER JOIN Menu
+    ON Cart.menu_id = Menu.menu_id
+    WHERE Cart.customer = ?
+    GROUP BY store_id`;
 
 const ADD =
     `INSERT INTO Cart VALUES (?, ?, 1)
@@ -14,6 +23,8 @@ const DECREASE = 'UPDATE Cart SET amount = amount - 1 WHERE customer = ? AND men
 
 const DELETE = 'DELETE FROM Cart WHERE customer = ? AND menu_id = ?';
 
+const CLEAR_CART = 'DELETE FROM Cart WHERE customer = ?';
+
 function loadOne(values, callback) {
     connection.query(LOAD_ONE, [values.customer, values.menu_id], callback);
 }
@@ -22,37 +33,15 @@ function loadOneCustomer(customer, callback) {
     connection.query(LOAD_ONE_CUSTOMER, [customer], callback);
 }
 
-function loadOneCustomerWithMenuName(customer, callback) {
-    loadOneCustomer(customer, function(err, rows) {
-        var menuArr = rows.map(row => row.menu_id);
-        Menu.getNameOfMenus(menuArr, function(err, names) {
-            for (var i in rows) {
-                rows[i].name = names[i];
-            }
-            callback(err, rows);
-        });
-    });
-}
-
 function getStoreOfCart(customer, callback) {
-    loadOneCustomer(customer, function(err, rows) {
-        var arr = rows.map(row => row.menu_id);
-        if (arr.length > 0) {
-            Menu.getStoreOfMenus(arr, function(err, rows) {
-                if (!err) {
-                    callback(err, rows)
-                } else return callback(err)
-            });
-        } else {
-            callback(err, [])
-        }
+    connection.query(LOAD_STORE, [customer], function(err, rows) {
+        callback(err, rows.map(row => row.store_id))
     })
 }
 
 function addMenu(values, callback) {
     getStoreOfCart(values.customer, function(err, rows) {
         if (!rows.length || values.store_id == rows[0]) {
-            // console.log(values.store_id, rows[0])
             connection.query(ADD, [values.customer, values.menu_id], callback);
         } else {
             callback(err, { "message": "Unmatch store" })
@@ -75,6 +64,10 @@ function decreaseMenu(values, callback) {
     });
 }
 
+function clearCart(customer, callback) {
+    connection.query(CLEAR_CART, [customer], callback)
+}
+
 module.exports = {
-    loadOneCustomer,loadOneCustomerWithMenuName, addMenu, decreaseMenu
+    loadOneCustomer,loadOneCustomer, addMenu, decreaseMenu, getStoreOfCart, clearCart
 }

@@ -1,6 +1,8 @@
 
 var connection = require('./db').connection();
 
+const CHECK_ACCOUNT = 'SELECT * FROM Customer WHERE username = ? AND password = ?'
+
 const LOAD_ACCOUNT =
     `SELECT username, email, firstname, lastname, balance
     FROM Customer
@@ -16,7 +18,7 @@ const INSERT_ACCOUNT =
     VALUES (?, ?, ?, ?, ?, ?)`;
 
 function checkAccount(values, callback) {
-    connection.query('SELECT * FROM Customer WHERE username = ? AND password = ?', values, callback);
+    connection.query(CHECK_ACCOUNT, values, callback);
 }
 
 function loadAccount(username, callback) {
@@ -68,10 +70,32 @@ function createAccount(data, callback) {
     });
 }
 
+const DECREASE_BALANCE = 'UPDATE Customer SET balance = balance - ? WHERE username = ?'
+
+function decreaseBalance_(username, price, callback) {
+    connection.query(DECREASE_BALANCE, [price, username], callback)
+}
+
+const LOAD_BALANCE = 'SELECT balance FROM Customer WHERE username = ?'
+
+function decreaseBalance(username, price, callback) {
+    connection.query(LOAD_BALANCE, [username], function(err, rows) {
+        if (!err) {
+            var balance = rows[0].balance;
+            if (price > balance) {
+                callback(err, { message_: "Not enough money" })
+            } else {
+                decreaseBalance_(username, price, callback);
+            }
+        } else console.error(err)
+    });
+}
+
 module.exports = {
     checkAccount,
     loadAddress,
     loadAccount,
     loadAccountWithAddress,
-    createAccount
+    createAccount,
+    decreaseBalance
 }

@@ -6,6 +6,9 @@ import { purchase } from '../redux/cart';
 export default class Address extends React.Component {
     componentWillMount() {
         this.setState(this.props.store.getState());
+        this.setState({
+            selected: 0
+        })
         this.dispatch = this.props.store.dispatch;
         this.props.store.subscribe(() => {
             this.setState(this.props.store.getState());
@@ -17,11 +20,14 @@ export default class Address extends React.Component {
     }
 
     handleChange(e) {
+        this.setState({
+            selected: e.target.value
+        })
         if (this.refs.selector.value != this.props.address.length) {
             var index = e.target.value
             this.dispatch(changeAddress(this.props.address[index].value));
         } else {
-            this.dispatch(changeAddress(this.refs.text.value.trim()));
+            this.dispatch(changeAddress(""));
         }
     }
 
@@ -36,6 +42,9 @@ export default class Address extends React.Component {
     }
 
     render() {
+        var addressInput = (
+            <input type="text" ref="text" onChange={this.handleChangeText.bind(this)} placeholder="Input your address..." className="form-control"/>
+        )
         return (
             <div className="panel-body">
                 <p>
@@ -48,7 +57,9 @@ export default class Address extends React.Component {
                         }
                         <option value={this.props.address.length}>Custom</option>
                     </select>
-                    <input type="text" ref="text" onChange={this.handleChangeText.bind(this)} placeholder="Input your address..." className="form-control"/>
+                    { ((enable) => {
+                        if (enable) return addressInput;
+                    })(this.state.selected == this.props.address.length) }
                 </p>
                 <p>
                     <button className="btn btn-success" onClick={this.handlePurchase.bind(this)}>

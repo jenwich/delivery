@@ -25,10 +25,11 @@ export function updateMenus(menus) {
 export function addMenu(menu_id) {
     return (dispatch, getState) => {
         var store_id = getState().store;
-        return getFetch('/menus/add_cart', {menu_id, store_id: 1}).then(res => {
+        return getFetch('/menus/add_cart', {menu_id, store_id}).then(res => {
             if (res.status >= 400) throw new Error("Bad response from server");
             return res.json();
         }).then(data => {
+            if (data.message) window.alert(data.message)
             dispatch(updateCart(data));
         });
     }

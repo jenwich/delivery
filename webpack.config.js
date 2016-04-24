@@ -7,7 +7,6 @@ var entryPoints = {
     "index": ['./index.js'],
     "signin": ['./signin.js'],
     "register": ['./register.js'],
-    "orderCreater": ['../OrderCreater/index.js'],
     "order": ['../Order/index.js'],
 };
 
