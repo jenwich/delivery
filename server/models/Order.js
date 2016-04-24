@@ -7,11 +7,22 @@ const LOAD_ORDER = `SELECT * FROM Order_ WHERE order_id = ?`;
 const LOAD_MENUS =
     `SELECT menu_id, amount FROM Order_Menu WHERE order_id = ?`;
 
-const LOAD_BY_CUSTOMER = `SELECT * FROM Order_ WHERE customer = ?`
+const LOAD_BY_CUSTOMER_MENU =
+    `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
+    FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
+    INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
+    WHERE Order_.customer = ?`
+
+const LOAD_BY_CUSTOMER = `SELECT * FROM Order_ WHERE customer = ? ORDER BY order_id DESC`
 
 const CREATE_ORDER =
     `INSERT INTO Order_ (store_id, customer, address, price, discount, time_ordered)
     VALUES (?, ?, ?, ?, ?, ?)`
+
+const COOK_ORDER =
+    `UPDATE Order_ SET time_cooked = ? WHERE order_id = ?`;
+const RECIEVE_ORDER =
+    `UPDATE Order_ SET time_recieved = ? WHERE order_id = ?`;
 
 function loadOne(id, callback) {
     connection.query(LOAD_ORDER, [id], callback);
@@ -21,8 +32,40 @@ function loadMenus(id, callback) {
     connection.query(LOAD_MENUS, [id], callback);
 }
 
+function loadByCustomerWithMenu(customer, callback) {
+    connection.query(LOAD_BY_CUSTOMER_MENU, [customer], function(err, rows) {
+        callback(err, rows)
+    });
+}
+
+function checkProcess(data) {
+    if (data.time_cooked && !data.time_recieved) return "sending";
+    else if (data.time_recieved) return "recieved";
+    else return "ordered"
+}
+
 function loadByCustomer(customer, callback) {
-    connection.query(LOAD_BY_CUSTOMER, [customer], callback);
+    connection.query(LOAD_BY_CUSTOMER, [customer], function(err, rows) {
+        if (!err) {
+            var data = rows;
+            data.forEach(function(row) {
+                row.process = checkProcess(row);
+                row.menus = [];
+            })
+            loadByCustomerWithMenu(customer, function(err, rows) {
+                if (!err) {
+                    rows.forEach(function(row) {
+                        data.forEach(function(row2) {
+                            if (row.order_id == row2.order_id) {
+                                row2.menus.push(row)
+                            }
+                        })
+                    });
+                    callback(err, data)
+                } else callback(err)
+            })
+        } else console.error(err);
+    });
 }
 
 function loadOneWithMenus(id, callback) {
@@ -75,9 +118,21 @@ function createOrder(values, callback) {
     })
 }
 
+function cookOrder(order_id, callback) {
+    var time = moment().format('YYYY-MM-DD HH:mm:ss');
+    connection.query(COOK_ORDER, [time, order_id], callback);
+}
+
+function recieveOrder(order_id, callback) {
+    var time = moment().format('YYYY-MM-DD HH:mm:ss');
+    connection.query(RECIEVE_ORDER, [time, order_id], callback);
+}
+
 module.exports = {
     loadOne,
     loadOneWithMenus,
     loadByCustomer,
-    createOrder
+    createOrder,
+    cookOrder,
+    recieveOrder
 }

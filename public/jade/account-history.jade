@@ -1,0 +1,16 @@
+extends ./account.jade
+
+block account-content
+    div
+        for item in data
+            .panel.panel-default
+                .panel-body
+                    h3 Order##{item.order_id}
+                    p Store: #{item.store_id}
+                    p Address: #{item.address}
+                    p Menus:
+                        ul: for menu in item.menus
+                            li #{menu.name} (*#{menu.amount}) ($#{menu.price*menu.amount})
+                    p Price: $#{item.price} (discount: $#{item.discount})
+
+    

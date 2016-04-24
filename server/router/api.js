@@ -107,6 +107,27 @@ router.post('/order/load', function(req, res) {
     });
 })
 
+router.post('/order/customer', function(req, res) {
+    Order.loadByCustomer(req.body.customer, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
+router.post('/order/cook', function(req, res) {
+    Order.cookOrder(req.body.order_id, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
+router.post('/order/recieve', function(req, res) {
+    Order.recieveOrder(req.body.order_id, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
 router.post('/order/create', function(req, res) {
     Order.createOrder(req.body, function(err, data) {
         if (err) console.error(err);
@@ -124,7 +145,7 @@ router.post('/cart/store', function(req, res) {
 })
 
 router.post('/cart/load', function(req, res) {
-    Cart.loadOneCustomerWithMenuName(req.body.customer, function(err, rows) {
+    Cart.loadOneCustomer(req.body.customer, function(err, rows) {
         if (err) console.error(err);
         else res.send(rows);
     });

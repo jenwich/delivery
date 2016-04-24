@@ -24,7 +24,32 @@ router.get('/', function(req, res) {
 
 router.get('/order', function(req, res) {
     Order.loadByCustomer(req.session.username, function(err, rows) {
-        routeHandler(req, res, 'account-order', rows);
+        routeHandler(req, res, 'account-order');
+    });
+})
+
+router.get('/history', function(req, res) {
+    Order.loadByCustomer(req.session.username, function(err, rows) {
+        routeHandler(req, res, 'account-history', rows.filter(row => row.process == 'recieved'));
+    });
+})
+
+router.post('/order/load', function(req, res) {
+    Order.loadByCustomer(req.session.username, function(err, data) {
+        if (err) console.error(err);
+        else res.send(data);
+    });
+})
+
+router.post('/order/recieve', function(req, res) {
+    Order.recieveOrder(req.body.order_id, function(err, data) {
+        if (err) console.error(err);
+        else {
+            Order.loadByCustomer(req.session.username, function(err, data) {
+                if (err) console.error(err);
+                else res.send(data);
+            });
+        }
     });
 })
 

@@ -1,4 +1,4 @@
-
+//
 var path = require('path');
 var express = require('express');
 var session = require('express-session');
@@ -18,6 +18,7 @@ app.listen(PORT, function() {
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../public/jade'));
 app.use('/js', express.static(path.resolve(__dirname, '../public/js')));
+app.use('/img', express.static(path.resolve(__dirname, '../public/img')));
 app.use('/css', express.static(path.resolve(__dirname, '../public/css')));
 app.use('/jquery', express.static(path.resolve(__dirname, '../node_modules/jquery/dist')));
 app.use('/bootstrap', express.static(path.resolve(__dirname, '../node_modules/bootstrap/dist')));

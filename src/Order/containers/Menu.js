@@ -29,7 +29,7 @@ export default class Menu extends React.Component {
             return (
                 <div className="row panel-body" key={menu.menu_id}>
                     <div className="col-sm-3">
-                        <div className="thumbnail"><img src={menu.image_url} alt={menu.name}/></div>
+                        <div className="thumbnail"><img src={'/img/menu_'+menu.menu_id+'.jpg'} alt={menu.name}/></div>
                     </div>
                     <div className="col-sm-7">
                         <h4>{menu.name}</h4>

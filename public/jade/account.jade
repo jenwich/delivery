@@ -13,7 +13,9 @@ block content
                 h1#page-title Welcome, #{username}
         .row
             .col-md-3 
-                block account-sidebar
+                .list-group
+                    a.list-group-item(class=(page == 'order' || page == 'index')? "active": "", href="/account/order") Order
+                    a.list-group-item(class=(page == 'history')? "active": "", href="/account/history") History
                 .panel.panel-default
                     .panel-heading
                         h3.panel-title My Profile
@@ -38,12 +40,7 @@ block content
                         p
                             a.btn.btn-default(href="/account/edit") Edit Account
             .col-md-9 
-                p content
+                block account-content
 
 block title
     title My Account
-
-block account-sidebar
-    .list-group
-        a.list-group-item(class=(page == 'order' || page == 'index')? "active": "", href="/account/order") Order
-        a.list-group-item(class=(page == 'history')? "active": "", href="/account/history") History
