@@ -87,8 +87,9 @@ router.post('/purchase', function(req, res) {
                 }
                 Customer.decreaseBalance(req.session.username, data.price, function(err, data_) {
                     if (!err) {
+                        console.log(data_);
                         if (data_.message_) {
-                            res.send({ message: data.message_ })
+                            res.send({ message: data_.message_ })
                         } else {
                             Order.createOrder(data, function(err, rows) {
                                 if (!err) {

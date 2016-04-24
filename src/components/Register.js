@@ -69,13 +69,13 @@ export default class Register extends React.Component {
                 <div className="form-group">
                     <label for="inputFirstName" className="col-sm-3 control-label">Firstname</label>
                     <div className="col-sm-9">
-                        <input id="inputFirstName" ref="firstName" type="text" placeholder="Firstname" aria-describedby="helpFirstname" className="form-control"/><span id="helpFirstname" className="help-block"></span>
+                        <input id="inputFirstName" onChange={this.handleName.bind(this)} ref="firstName" type="text" placeholder="Firstname" aria-describedby="helpFirstname" className="form-control"/><span id="helpFirstname" className="help-block"></span>
                     </div>
                 </div>
                 <div className="form-group">
                     <label for="inputLastName" className="col-sm-3 control-label">Lastname</label>
                     <div className="col-sm-9">
-                        <input id="inputLastName" ref="lastName" type="text" placeholder="Lastname" aria-describedby="helpLastname" className="form-control"/><span id="helpLastname" className="help-block"></span>
+                        <input id="inputLastName" onChange={this.handleName.bind(this)} ref="lastName" type="text" placeholder="Lastname" aria-describedby="helpLastname" className="form-control"/><span id="helpLastname" className="help-block"></span>
                     </div>
                 </div>
                 <RegisterAddressList list={this.state.address} dispatch={ this.dispatch } />
@@ -84,15 +84,6 @@ export default class Register extends React.Component {
                         <button type="submit" className="btn btn-success">Sign Up</button><span className="help-block">{ this.state.message }</span>
                     </div>
                 </div>
-                    {/*Username: <input type="text" ref="username" onChange={ this.handleUsername.bind(this) }/> <span>{ this.state.username.message }</span><br />
-                    Password: <input type="password" ref="password" onChange={ this.handlePassword.bind(this) }/> <span>{ this.state.password.message }</span><br />
-                    Confire-Password: <input type="password" ref="confirmPassword" onChange={ this.handlePassword.bind(this) }/> <span>{ this.state.confirmPassword.message }</span><br />
-                    E-mail: <input type="text" ref="email" onChange={ this.handleEmail.bind(this) }/> <span>{ this.state.email.message }</span><br />
-                    FirstName: <input type="text" ref="firstName" onChange={ this.handleName.bind(this) }/><br />
-                    LastName: <input type="text" ref="lastName" onChange={ this.handleName.bind(this) }/><br />
-                    <RegisterAddressList list={ this.state.address } dispatch={ this.dispatch } />
-                    <button onClick={ this.handleSubmit.bind(this) }>Submit</button>
-                    { this.state.message }*/}
             </form>
         );
     }
