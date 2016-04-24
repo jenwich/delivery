@@ -29,7 +29,7 @@ export default class Cart extends React.Component {
                                 <tr key={menu.menu_id}>
                                     <td width="">{menu.name}</td>
                                     <td width="10%">{menu.amount}</td>
-                                    <td width="20%">${menu.price}</td>
+                                    <td width="20%">${(menu.price).toFixed(2)}</td>
                                     <td width="10%">
                                         <button className="btn btn-danger btn-xs" onClick={this.handleRemove.bind(this, menu.menu_id)}>
                                             <span aria-hidden="true" className="glyphicon glyphicon-minus"></span>
@@ -41,15 +41,15 @@ export default class Cart extends React.Component {
                     }
                     <tr>
                         <td colSpan="2">Total</td>
-                        <td colSpan="2">${this.state.cart.total}</td>
+                        <td colSpan="2">${(this.state.cart.total).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colSpan="2">Discount</td>
-                        <td colSpan="2">${this.state.cart.discount}</td>
+                        <td colSpan="2">${(this.state.cart.discount).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colSpan="2">Summary</td>
-                        <td colSpan="2">${this.state.cart.summary}</td>
+                        <td colSpan="2">${(this.state.cart.summary).toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>

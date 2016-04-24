@@ -25,8 +25,8 @@ export default class Orders extends React.Component {
                                 return (
                                     <li key={menu.menu_id}>
                                         <span>{menu.name}</span>
-                                        <span> (*{menu.amount})</span>
-                                        <span> (${menu.price * menu.amount})</span>
+                                        <span> (x{menu.amount})</span>
+                                        <span> (${(menu.price * menu.amount).toFixed(2)})</span>
                                     </li>
                                 )
                             })
