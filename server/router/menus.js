@@ -5,6 +5,7 @@ var Store = require('../models/Store');
 var Menu = require('../models/Menu');
 var Cart = require('../models/Cart');
 var Order = require('../models/Order');
+var Coupon = require('../models/Coupon');
 
 router.get('/', function(req, res) {
     res.render('menus', {
@@ -75,32 +76,29 @@ router.post('/purchase', function(req, res) {
     if (req.session.username) {
         loadCart(req.session.username, "", function(cart) {
             var menuArr = cart.menus.map(row => row.menu_id);
-            Menu.getStoreOfMenus(menuArr, function(err, stores) {
-                var store_id = stores[0];
-                var data = {
-                    store_id,
-                    customer: req.session.username,
-                    address: req.body.address,
-                    price: cart.summary,
-                    discount: cart.discount,
-                    menus: cart.menus
-                }
-                Customer.decreaseBalance(req.session.username, data.price, function(err, data_) {
-                    if (!err) {
-                        console.log(data_);
-                        if (data_.message_) {
-                            res.send({ message: data_.message_ })
-                        } else {
-                            Order.createOrder(data, function(err, rows) {
-                                if (!err) {
-                                    Cart.clearCart(req.session.username, function(err, rows) {
-                                        res.send({ message: "success", redirect: "/account/order" })
-                                    });
-                                } else console.error(err);
-                            });
-                        }
-                    } else console.error(err)
-                });
+            var store_id = cart.store_id;
+            var data = {
+                store_id,
+                customer: req.session.username,
+                address: req.body.address,
+                price: cart.summary,
+                discount: cart.discount,
+                menus: cart.menus
+            }
+            Customer.decreaseBalance(req.session.username, data.price, function(err, data_) {
+                if (!err) {
+                    if (data_.message_) {
+                        res.send({ message: data_.message_ })
+                    } else {
+                        Order.createOrder(data, function(err, rows) {
+                            if (!err) {
+                                Cart.clearCart(req.session.username, function(err, rows) {
+                                    res.send({ message: "success", redirect: "/account/order" })
+                                });
+                            } else console.error(err);
+                        });
+                    }
+                } else console.error(err)
             });
         });
     } else {
@@ -113,9 +111,11 @@ function loadCart(username, message, callback) {
     if (!message) message = "";
     if (username) {
         Cart.loadOneCustomer(username, function(err, rows) {
-            calculatePrice(rows, function(data) {
+            var store_id = (rows[0])? rows[0].store_id: 0;
+            calculatePrice(rows, {username, store_id}, function(data) {
                 rows.forEach((row) => row.price *= row.amount)
                 var data = {
+                    store_id,
                     menus: rows,
                     total: data.total,
                     discount: data.discount,
@@ -130,13 +130,17 @@ function loadCart(username, message, callback) {
     }
 }
 
-function calculatePrice(data, callback) {
-    var sum = data.reduce((sum, item) => sum + item.price * item.amount, 0);
-    callback({
-        total: sum,
-        discount: 0,
-        summary: sum
-    });
+function calculatePrice(rows, values, callback) {
+    var sum = rows.reduce((sum, item) => sum + item.price * item.amount, 0);
+    Coupon.loadOne({customer: values.username, store_id: values.store_id}, function(err, data) {
+        var discount = 0
+        if (data) discount = sum * data.rate/100;
+        callback({
+            total: sum,
+            discount,
+            summary: sum-discount
+        });
+    })
 }
 
 module.exports = router;

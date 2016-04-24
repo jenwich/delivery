@@ -1,0 +1,32 @@
+extends ./manager-view.jade
+
+block manager-content
+    .panel.panel-default
+        .panel-body
+            h4 Add Coupon
+            form.form-inline(method="POST", action="/manager/view/coupon/add")
+                .form-group(style="margin-right: 10px;")
+                    label
+                        span: big Username &nbsp;
+                        input.form-control(type="text", name="username")
+                .form-group(style="margin-right: 10px;")
+                    label
+                        span: big Rate &nbsp;
+                        .input-group
+                            input.form-control(type="text", size="4", name="rate")
+                            .input-group-addon %
+                .form-group
+                    label
+                        button.btn.btn-success(type="submit") Submit
+    table.table.table-bordered
+        thead
+            tr
+                th Customer
+                th Rate
+        tbody
+            for coupon in coupons
+                tr
+                    td #{coupon.customer}
+                    td #{coupon.rate}%
+
+block js
