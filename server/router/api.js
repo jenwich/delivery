@@ -73,6 +73,24 @@ router.post('/menu/price', function(req, res) {
     });
 })
 
+router.post('/menu/store', function(req, res) {
+    Menu.loadByStore(req.body.store_id, function(err, rows) {
+        if (err) console.error(err);
+        else {
+            res.send(rows);
+        }
+    });
+})
+
+router.post('/menu/store/change', function(req, res) {
+    Menu.changeAvailable(req.body.menu_id, req.body.value, function(err, rows) {
+        if (err) console.error(err);
+        else {
+            res.send(rows);
+        }
+    });
+})
+
 router.post('/store/all', function(req, res) {
     Store.loadAll(function(err, rows) {
         if (err) console.error(err);

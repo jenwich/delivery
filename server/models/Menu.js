@@ -56,6 +56,18 @@ function getNameOfMenus(menu_arr, callback) {
     });
 }
 
+const CHANGE_AVAILABLE = `UPDATE Menu SET available = ? WHERE menu_id = ?`
+
+function changeAvailable(menu_id, value, callback) {
+    connection.query(CHANGE_AVAILABLE, [value, menu_id], callback);
+}
+
 module.exports = {
-    loadOne, loadByStore, loadCategoryByStore, getStoreOfMenus, getPriceOfMenus, getNameOfMenus
+    loadOne,
+    loadByStore,
+    loadCategoryByStore,
+    getStoreOfMenus,
+    getPriceOfMenus,
+    getNameOfMenus,
+    changeAvailable
 }

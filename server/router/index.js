@@ -22,6 +22,11 @@ router.get('/signout', function(req, res) {
         req.session.destroy(function() {
             res.redirect('/signin')
         });
+    } else if (req.session.store_id) {
+        console.log("store", req.session.store_id, "logged out");
+        req.session.destroy(function() {
+            res.redirect('/manager')
+        });
     } else {
         res.redirect('/');
     }
