@@ -1,5 +1,6 @@
 
 var router = require('express').Router();
+var moment = require('moment')
 var Store = require('../models/Store')
 var Store_Review = require('../models/Store_Review')
 var Menu_Review = require('../models/Menu_Review')
@@ -17,6 +18,9 @@ router.get('/', function(req, res) {
 router.get('/:store_id', function(req, res) {
     Store.loadOneWithMenus(req.params.store_id, function(err, data) {
         Store_Review.loadByStore(req.params.store_id, function(err, rows) {
+            rows.forEach(function(row) {
+                row.time = moment.unix(row.time).format('D MMM YYYY HH:mm')
+            })
             res.render('stores-view', {
                 username: req.session.username,
                 data: data,
@@ -47,6 +51,9 @@ router.post('/:store_id/store_review', function(req, res) {
 router.get('/menu/:menu_id', function(req, res) {
     Menu.loadOne(req.params.menu_id, function(err, data) {
         Menu_Review.loadByMenu(req.params.menu_id, function(err, rows) {
+            rows.forEach(function(row) {
+                row.time = moment.unix(row.time).format('D MMM YYYY HH:mm')
+            })
             res.render('stores-menu', {
                 username: req.session.username,
                 data: data,

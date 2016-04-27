@@ -4,7 +4,6 @@ var webpack = require('webpack');
 var debug = process.env.NODE_ENV !== "production";
 
 var entryPoints = {
-    "index": ['./index.js'],
     "signin": ['./signin.js'],
     "register": ['./register.js'],
     "order": ['../Order/index.js'],
