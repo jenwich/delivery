@@ -47,6 +47,8 @@ export function purchase() {
             }).then(data => {
                 if (data.message == 'success') {
                     window.location = data.redirect
+                } else if (data.message == 'unavailable') {
+                    window.alert(`Some menus are unavailable\n(${data.menus.toString()})`);
                 } else {
                     window.alert(data.message)
                 }

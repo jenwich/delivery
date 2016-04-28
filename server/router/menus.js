@@ -83,21 +83,26 @@ router.post('/purchase', function(req, res) {
                 discount: cart.discount,
                 menus: cart.menus
             }
-            Customer.decreaseBalance(req.session.username, data.price, function(err, data_) {
-                if (!err) {
-                    if (data_.message_) {
-                        res.send({ message: data_.message_ })
-                    } else {
-                        Order.createOrder(data, function(err, rows) {
-                            if (!err) {
-                                Cart.clearCart(req.session.username, function(err, rows) {
-                                    res.send({ message: "success", redirect: "/account/order" })
-                                });
-                            } else console.error(err);
-                        });
-                    }
-                } else console.error(err)
-            });
+            var unAvailableMenus = cart.menus.filter(menu => menu.available == false).map(menu => menu.name);
+            if(unAvailableMenus.length) {
+                res.send({ message: "unavailable", menus: unAvailableMenus });
+            } else {
+                Customer.decreaseBalance(req.session.username, data.price, function(err, data_) {
+                    if (!err) {
+                        if (data_.message_) {
+                            res.send({ message: data_.message_ })
+                        } else {
+                            Order.createOrder(data, function(err, rows) {
+                                if (!err) {
+                                    Cart.clearCart(req.session.username, function(err, rows) {
+                                        res.send({ message: "success", redirect: "/account/order" })
+                                    });
+                                } else console.error(err);
+                            });
+                        }
+                    } else console.error(err)
+                });
+            }
         });
     } else {
         res.send({ message: "Please signin" })

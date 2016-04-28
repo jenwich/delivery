@@ -5,7 +5,7 @@ var Menu = require('./Menu');
 const LOAD_ONE = 'SELECT * FROM Cart WHERE customer = ? AND menu_id = ?'
 
 const LOAD_ONE_CUSTOMER =
-    `SELECT Cart.menu_id, name, price, amount, Menu.store_id FROM Cart INNER JOIN Menu
+    `SELECT Cart.menu_id, name, price, amount, Menu.store_id, Menu.available FROM Cart INNER JOIN Menu
     ON Cart.menu_id = Menu.menu_id
     WHERE Cart.customer = ?`;
 
