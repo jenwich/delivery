@@ -54,3 +54,18 @@ export function purchase() {
         }
     }
 }
+
+export function clearCart() {
+    return (dispatch) => {
+        return getFetch('/menus/clear', {}).then(res => {
+            if (res.status >= 400) throw new Error("Bad response from server");
+            return res.json();
+        }).then(data => {
+            if (data.message) {
+                window.alert(data.message)
+            } else {
+                dispatch(updateCart(data))
+            }
+        });
+    }
+}

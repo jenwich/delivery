@@ -42,8 +42,8 @@ export default class Menu extends React.Component {
                         <p><b>Price: </b><span>${menu.price}</span></p>
                         <p>
                             <button href="#" role="button" className="btn btn-primary" onClick={this.handleAdd.bind(this, menu.menu_id)}>
-                                <span aria-hidden="true" className="glyphicon glyphicon-plus-sign"></span>
-                                <span> Add</span>
+                                <span aria-hidden="true" className="glyphicon glyphicon-plus"></span>
+                                <span> &nbsp;Add</span>
                             </button>
                         </p>
                     </div>

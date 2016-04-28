@@ -31,11 +31,9 @@ router.post('/load_store', function(req, res) {
 });
 
 router.post('/load_cart', function(req, res) {
-    Cart.loadOneCustomer(req.session.username, function(err, rows) {
-        loadCart(req.session.username, "", function(data) {
-            res.send(data);
-        });
-    })
+    loadCart(req.session.username, "", function(data) {
+        res.send(data);
+    });
 });
 
 router.post('/add_cart', function(req, res) {
@@ -106,6 +104,21 @@ router.post('/purchase', function(req, res) {
     }
 });
 
+router.post('/clear', function(req, res) {
+    if (req.session.username) {
+        Cart.clearCart(req.session.username, function(err, rows) {
+            if (!err) {
+                loadCart(req.session.username, "", function(data) {
+                    if (!err) {
+                        res.send(data);
+                    } else console.error(err)
+                });
+            } else console.error(err);
+        });
+    } else {
+        res.send({ message: "Please signin" });
+    }
+});
 
 function loadCart(username, message, callback) {
     if (!message) message = "";

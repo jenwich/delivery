@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { changeAddress } from '../redux/address';
-import { purchase } from '../redux/cart';
+import { purchase, clearCart } from '../redux/cart';
 
 export default class Address extends React.Component {
     componentWillMount() {
@@ -41,6 +41,10 @@ export default class Address extends React.Component {
         this.dispatch(purchase());
     }
 
+    handleClear() {
+        this.dispatch(clearCart())
+    }
+
     render() {
         var addressInput = (
             <input type="text" ref="text" onChange={this.handleChangeText.bind(this)} placeholder="Input your address..." className="form-control"/>
@@ -65,6 +69,10 @@ export default class Address extends React.Component {
                     <button className="btn btn-success" onClick={this.handlePurchase.bind(this)}>
                         <span aria-hidden="true" className="glyphicon glyphicon-shopping-cart"></span>
                         <span> Purchase</span>
+                    </button>
+                    <button className="btn btn-danger" onClick={this.handleClear.bind(this)} style={ {marginLeft: "10px"} }>
+                        <span aria-hidden="true" className="glyphicon glyphicon-remove"></span>
+                        <span> Clear</span>
                     </button>
                 </p>
             </div>
