@@ -22,6 +22,8 @@ const DECREASE_BALANCE = 'UPDATE Customer SET balance = balance - ? WHERE userna
 
 const LOAD_BALANCE = 'SELECT balance FROM Customer WHERE username = ?'
 
+const ADD_BALANCE = 'UPDATE Customer SET balance = balance + ? WHERE username = ?';
+
 function checkAccount(values, callback) {
     var password = crypto.createHash('md5').update(values.password).digest('hex');
     connection.query(CHECK_ACCOUNT, [values.username, password], callback);
@@ -100,11 +102,27 @@ function decreaseBalance(username, price, callback) {
     });
 }
 
+function loadBalance(username, callback) {
+    connection.query(LOAD_BALANCE, [username], function(err, rows) {
+        if (!err) {
+            if (rows.length) {
+                callback(err, rows[0].balance)
+            } else callback(err, 0)
+        } else callback(err)
+    });
+}
+
+function addBalance(username, amount, callback) {
+    connection.query(ADD_BALANCE, [amount, username], callback);
+}
+
 module.exports = {
     checkAccount,
     loadAddress,
     loadAccount,
     loadAccountWithAddress,
     createAccount,
-    decreaseBalance
+    decreaseBalance,
+    loadBalance,
+    addBalance
 }

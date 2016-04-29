@@ -53,4 +53,24 @@ router.post('/order/recieve', function(req, res) {
     });
 })
 
+router.get('/balance', function(req, res) {
+    routeHandler(req, res, 'account-balance');
+})
+
+router.post('/balance/load', function(req, res) {
+    Customer.loadBalance(req.session.username, function(err, balance) {
+        res.send({ balance });
+    });
+})
+
+router.post('/balance/add', function(req, res) {
+    Customer.addBalance(req.session.username, req.body.amount, function(err) {
+        if (!err) {
+            Customer.loadBalance(req.session.username, function(err, balance) {
+                res.send({ balance });
+            });
+        } else console.error(err);
+    })
+})
+
 module.exports = router;

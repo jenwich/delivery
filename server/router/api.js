@@ -49,6 +49,24 @@ router.post('/customer/address', function(req, res) {
     })
 })
 
+router.post('/customer/balance', function(req, res) {
+    Customer.loadBalance(req.body.username, function(err, balance) {
+        if (err) console.error(err);
+        else {
+            res.send({balance});
+        }
+    })
+})
+
+router.post('/customer/addbalance', function(req, res) {
+    Customer.addBalance(req.body.username, req.body.amount, function(err, rows) {
+        if (err) console.error(err);
+        else {
+            res.send(rows);
+        }
+    })
+})
+
 router.post('/menu', function(req, res) {
     Menu.loadOneWithRecipes(req.body.id, function(err, data) {
         if (err) console.error(err);

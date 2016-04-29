@@ -10,6 +10,7 @@ var entryPoints = {
     "customerOrder": ['../CustomerOrder/index.js'],
     "managerOrder": ['../ManagerOrder/index.js'],
     "managerMenus": ['../ManagerMenus/index.js'],
+    "balance": ['../Balance/index.js']
 };
 
 var vendors = ['react'];
