@@ -15,7 +15,10 @@ router.get('/', function(req, res) {
 })
 
 router.post('/req', function(req, res) {
-    Customer.checkAccount([ req.body.username, req.body.password ], function(err, rows) {
+    Customer.checkAccount({
+        username: req.body.username,
+        password: req.body.password
+    }, function(err, rows) {
         if (!err) {
             var message, redirect;
             if (rows.length) {

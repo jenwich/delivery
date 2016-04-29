@@ -1,4 +1,5 @@
 
+var crypto = require('crypto')
 var connection = require('./db').connection();
 
 const CHECK_ACCOUNT = 'SELECT * FROM Customer WHERE username = ? AND password = ?'
@@ -17,8 +18,13 @@ const INSERT_ACCOUNT =
     `INSERT INTO Customer (username, password, email, firstname, lastname, balance)
     VALUES (?, ?, ?, ?, ?, ?)`;
 
+const DECREASE_BALANCE = 'UPDATE Customer SET balance = balance - ? WHERE username = ?'
+
+const LOAD_BALANCE = 'SELECT balance FROM Customer WHERE username = ?'
+
 function checkAccount(values, callback) {
-    connection.query(CHECK_ACCOUNT, values, callback);
+    var password = crypto.createHash('md5').update(values.password).digest('hex');
+    connection.query(CHECK_ACCOUNT, [values.username, password], callback);
 }
 
 function loadAccount(username, callback) {
@@ -58,7 +64,14 @@ function insertAddress(values, callback) {
 }
 
 function createAccount(data, callback) {
-    var arr = [ data.username, data.password, data.email, data.firstName, data.lastName, 0 ];
+    var arr = [
+        data.username,
+        crypto.createHash('md5').update(data.password).digest('hex'),
+        data.email,
+        data.firstName,
+        data.lastName,
+        0
+    ];
     connection.query(INSERT_ACCOUNT, arr, function(err, rows) {
         if (!err) {
             insertAddress({ username: data.username, address: data.address }, function(err, rows) {
@@ -70,13 +83,9 @@ function createAccount(data, callback) {
     });
 }
 
-const DECREASE_BALANCE = 'UPDATE Customer SET balance = balance - ? WHERE username = ?'
-
 function decreaseBalance_(username, price, callback) {
     connection.query(DECREASE_BALANCE, [price, username], callback)
 }
-
-const LOAD_BALANCE = 'SELECT balance FROM Customer WHERE username = ?'
 
 function decreaseBalance(username, price, callback) {
     connection.query(LOAD_BALANCE, [username], function(err, rows) {
