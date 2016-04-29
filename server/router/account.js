@@ -1,7 +1,8 @@
 
 var router = require('express').Router();
 var Customer = require('../models/Customer');
-var Order = require('../models/Order')
+var Order = require('../models/Order');
+var Coupon = require('../models/Coupon');
 
 function routeHandler(req, res, view, data) {
     if (!req.session.username) {
@@ -70,6 +71,12 @@ router.post('/balance/add', function(req, res) {
                 res.send({ balance });
             });
         } else console.error(err);
+    })
+})
+
+router.get('/coupon', function(req, res) {
+    Coupon.loadByCustomer(req.session.username, function(err, rows) {
+        routeHandler(req, res, 'account-coupon', rows);
     })
 })
 

@@ -1,0 +1,14 @@
+extends ./account.jade
+
+block account-content
+    table.table.table-bordered
+        thead
+            tr
+                th Store
+                th Rate
+        tbody
+            for coupon in data
+                tr
+                    td #{coupon.store_name}
+                    td #{coupon.rate}%
+    
