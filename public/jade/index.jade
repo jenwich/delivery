@@ -19,11 +19,11 @@ block content
             .panel-body
                 for menu in menus
                     .row
-                        .col-md-3
+                        .col-sm-3
                             .thumbnail
                                 a(href="/stores/menu/#{menu.menu_id}")
                                     img(src='/img/menu_#{menu.menu_id}.jpg')
-                        .col-md-7
+                        .col-sm-6
                             h3 #{menu.menu_name}
                             p #{menu.description}
                             p
@@ -34,7 +34,7 @@ block content
                                 big
                                     b Price: 
                                     span  $#{menu.price}
-                        .col-md-2
+                        .col-sm-3
                             p
                                 h3(style="text-align: right")
                                     small SCORE &nbsp;&nbsp;
