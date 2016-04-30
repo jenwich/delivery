@@ -167,8 +167,8 @@ router.post('/order/cook', function(req, res) {
     });
 })
 
-router.post('/order/recieve', function(req, res) {
-    Order.recieveOrder(req.body.order_id, function(err, data) {
+router.post('/order/receive', function(req, res) {
+    Order.receiveOrder(req.body.order_id, function(err, data) {
         if (err) console.error(err);
         else res.send(data);
     });

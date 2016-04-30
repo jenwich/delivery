@@ -34,7 +34,7 @@ router.get('/order', function(req, res) {
 
 router.get('/history', function(req, res) {
     Order.loadByCustomer(req.session.username, function(err, rows) {
-        routeHandler(req, res, 'account-history', rows.filter(row => row.process == 'recieved'));
+        routeHandler(req, res, 'account-history', rows.filter(row => row.process == 'received'));
     });
 })
 
@@ -45,14 +45,14 @@ router.post('/order/load', function(req, res) {
     });
 })
 
-router.post('/order/recieve', function(req, res) {
-    Order.recieveOrder(req.body.order_id, function(err, data) {
+router.post('/order/receive', function(req, res) {
+    Order.receiveOrder(req.body.order_id, function(err, data) {
         if (err) console.error(err);
         else {
             Order.loadByCustomer(req.session.username, function(err, data) {
                 if (err) console.error(err);
                 else {
-                    console.log(`[${moment().format(DATE_FORMAT)}]`, `order#${req.body.order_id} recieved`)
+                    console.log(`[${moment().format(DATE_FORMAT)}]`, `order#${req.body.order_id} received`)
                     res.send(data);
                 }
             });

@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { recieveOrder } from '../redux/orders'
+import { receiveOrder } from '../redux/orders'
 
 export default class Orders extends React.Component {
-    handleRecieve() {
-        this.props.dispatch(recieveOrder(this.props.order_id));
+    handleReceive() {
+        this.props.dispatch(receiveOrder(this.props.order_id));
     }
 
     render() {
         var button = (
-            <button disabled={ this.props.process == 'ordered'} onClick={this.handleRecieve.bind(this)} className="btn btn-success">Recieve</button>
+            <button disabled={ this.props.process == 'ordered'} onClick={this.handleReceive.bind(this)} className="btn btn-success">Receive</button>
         );
         return (
             <div className="panel panel-default">
@@ -37,7 +37,7 @@ export default class Orders extends React.Component {
                         {
                             ((enable) => {
                                 if (enable) return button;
-                            })(this.props.process != 'recieved')
+                            })(this.props.process != 'received')
                         }
                     </p>
                 </div>

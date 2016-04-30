@@ -23,8 +23,8 @@ const CREATE_ORDER =
 const COOK_ORDER =
     `UPDATE Order_ SET time_cooked = ? WHERE order_id = ?`;
 
-const RECIEVE_ORDER =
-    `UPDATE Order_ SET time_recieved = ? WHERE order_id = ?`;
+const RECEIVE_ORDER =
+    `UPDATE Order_ SET time_received = ? WHERE order_id = ?`;
 
 const LOAD_BY_STORE = `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
 
@@ -49,8 +49,8 @@ function loadByCustomerWithMenu(customer, callback) {
 }
 
 function checkProcess(data) {
-    if (data.time_cooked && !data.time_recieved) return "sending";
-    else if (data.time_recieved) return "recieved";
+    if (data.time_cooked && !data.time_received) return "sending";
+    else if (data.time_received) return "received";
     else return "ordered"
 }
 
@@ -163,9 +163,9 @@ function cookOrder(order_id, callback) {
     connection.query(COOK_ORDER, [time, order_id], callback);
 }
 
-function recieveOrder(order_id, callback) {
+function receiveOrder(order_id, callback) {
     var time = moment().format('YYYY-MM-DD HH:mm:ss');
-    connection.query(RECIEVE_ORDER, [time, order_id], callback);
+    connection.query(RECEIVE_ORDER, [time, order_id], callback);
 }
 
 module.exports = {
@@ -175,5 +175,5 @@ module.exports = {
     loadByStore,
     createOrder,
     cookOrder,
-    recieveOrder
+    receiveOrder
 }

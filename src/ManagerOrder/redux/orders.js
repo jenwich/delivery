@@ -1,6 +1,6 @@
 
 const PREFIX = 'MANAGER_ORDER/ORDERS/'
-const RECIEVE = PREFIX + 'RECIEVE'
+const RECEIVE = PREFIX + 'RECEIVE'
 const UPDATE = PREFIX + 'UPDATE'
 import { getFetch } from '../../services'
 
