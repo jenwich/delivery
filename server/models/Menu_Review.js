@@ -23,12 +23,12 @@ const SUM_OF_MENUS =
     INNER JOIN (
         SELECT menu_id, ROUND(SUM(score)/COUNT(*), 1) AS score, COUNT(*) AS count FROM Menu_Review
         GROUP BY menu_id
-        LIMIT 10
     ) AS Review
     ON Menu.menu_id = Review.menu_id
     INNER JOIN Store
     ON Store.store_id = Menu.Store_id
-    ORDER BY score DESC, count DESC`
+    ORDER BY score DESC, count DESC
+    LIMIT 10`
 
 function loadByMenu(menu_id, callback) {
     connection.query(LOAD_BY_MENU, [menu_id], callback);
