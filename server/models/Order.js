@@ -24,7 +24,11 @@ const LOAD_BY_CUSTOMER_MENU =
     WHERE Order_.customer = ?`
 
 const LOAD_BY_STORE =
-    `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
+    `SELECT order_id, customer, address, price, discount,
+        UNIX_TIMESTAMP(time_ordered) AS time_ordered,
+        UNIX_TIMESTAMP(time_cooked) AS time_cooked,
+        UNIX_TIMESTAMP(time_received) AS time_received
+    FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
 
 const LOAD_BY_STORE_MENU =
     `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
