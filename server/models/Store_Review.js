@@ -12,6 +12,10 @@ const LOAD_BY_STORE =
 
 const LOAD_BY_CUSTOMER = `SELECT * FROM Store_Review WHERE customer = ?`
 
+const INSERT =
+    `INSERT INTO Store_Review VALUES (?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE score = ?, comment = ?, time_review = ?`;
+
 function loadByStore(store_id, callback) {
     connection.query(LOAD_BY_STORE, [store_id], callback);
 }
@@ -19,10 +23,6 @@ function loadByStore(store_id, callback) {
 function loadByCustomer(customer, callback) {
     connection.query(LOAD_BY_CUSTOMER, [customer], callback);
 }
-
-const INSERT =
-    `INSERT INTO Store_Review VALUES (?, ?, ?, ?, ?)
-    ON DUPLICATE KEY UPDATE score = ?, comment = ?, time_review = ?`;
 
 function insertReview(values, callback) {
     var time = moment().format('YYYY-MM-DD HH:mm:ss')

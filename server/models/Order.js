@@ -21,8 +21,17 @@ const CREATE_ORDER =
 
 const COOK_ORDER =
     `UPDATE Order_ SET time_cooked = ? WHERE order_id = ?`;
+
 const RECIEVE_ORDER =
     `UPDATE Order_ SET time_recieved = ? WHERE order_id = ?`;
+
+const LOAD_BY_STORE = `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
+
+const LOAD_BY_STORE_MENU =
+    `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
+    FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
+    INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
+    WHERE Order_.store_id = ?`
 
 function loadOne(id, callback) {
     connection.query(LOAD_ORDER, [id], callback);
@@ -67,14 +76,6 @@ function loadByCustomer(customer, callback) {
         } else callback(err);
     });
 }
-
-const LOAD_BY_STORE = `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
-
-const LOAD_BY_STORE_MENU =
-    `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
-    FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
-    INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
-    WHERE Order_.store_id = ?`
 
 function loadByStoreWithMenu(store_id, callback) {
     connection.query(LOAD_BY_STORE_MENU, [store_id], function(err, rows) {

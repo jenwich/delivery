@@ -16,6 +16,8 @@ const LOAD_PRICE = 'SELECT price FROM Menu WHERE menu_id IN ?';
 
 const LOAD_NAME = 'SELECT name FROM Menu WHERE menu_id IN ?';
 
+const CHANGE_AVAILABLE = `UPDATE Menu SET available = ? WHERE menu_id = ?`
+
 function loadOne(menu_id, callback) {
     connection.query(LOAD_ONE, [menu_id], function(err, rows) {
         callback(err, rows[0]);
@@ -55,8 +57,6 @@ function getNameOfMenus(menu_arr, callback) {
         callback(err, rows);
     });
 }
-
-const CHANGE_AVAILABLE = `UPDATE Menu SET available = ? WHERE menu_id = ?`
 
 function changeAvailable(menu_id, value, callback) {
     connection.query(CHANGE_AVAILABLE, [value, menu_id], callback);

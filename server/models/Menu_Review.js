@@ -13,6 +13,23 @@ const LOAD_BY_MENU =
 
 const LOAD_BY_CUSTOMER = `SELECT * FROM Menu_Review WHERE customer = ?`
 
+const INSERT =
+    `INSERT INTO Menu_Review VALUES (?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE score = ?, comment = ?, time_review = ?`;
+
+const SUM_OF_MENUS =
+    `SELECT Menu.menu_id, Store.store_id, Menu.name AS menu_name, Store.name AS store_name, Menu.description, price, score, count
+    FROM Menu
+    INNER JOIN (
+        SELECT menu_id, ROUND(SUM(score)/COUNT(*), 1) AS score, COUNT(*) AS count FROM Menu_Review
+        GROUP BY menu_id
+        LIMIT 10
+    ) AS Review
+    ON Menu.menu_id = Review.menu_id
+    INNER JOIN Store
+    ON Store.store_id = Menu.Store_id
+    ORDER BY score DESC, count DESC`
+
 function loadByMenu(menu_id, callback) {
     connection.query(LOAD_BY_MENU, [menu_id], callback);
 }
@@ -20,10 +37,6 @@ function loadByMenu(menu_id, callback) {
 function loadByCustomer(customer, callback) {
     connection.query(LOAD_BY_CUSTOMER, [customer], callback);
 }
-
-const INSERT =
-    `INSERT INTO Menu_Review VALUES (?, ?, ?, ?, ?)
-    ON DUPLICATE KEY UPDATE score = ?, comment = ?, time_review = ?`;
 
 function insertReview(values, callback) {
     var time = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -39,19 +52,6 @@ function insertReview(values, callback) {
     ];
     connection.query(INSERT, arr, callback);
 }
-
-const SUM_OF_MENUS =
-    `SELECT Menu.menu_id, Store.store_id, Menu.name AS menu_name, Store.name AS store_name, Menu.description, price, score, count
-    FROM Menu
-    INNER JOIN (
-        SELECT menu_id, ROUND(SUM(score)/COUNT(*), 1) AS score, COUNT(*) AS count FROM Menu_Review
-        GROUP BY menu_id
-        LIMIT 10
-    ) AS Review
-    ON Menu.menu_id = Review.menu_id
-    INNER JOIN Store
-    ON Store.store_id = Menu.Store_id
-    ORDER BY score DESC, count DESC`
 
 function getPopularMenus(callback) {
     connection.query(SUM_OF_MENUS, callback);
