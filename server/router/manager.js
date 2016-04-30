@@ -10,7 +10,8 @@ router.get('/', function(req, res) {
        res.redirect('/');
     } else if (!req.session.store_id) {
         res.render('manager', {
-            username: req.session.username
+            username: req.session.username,
+            store_name: req.session.store_name
         });
     } else {
         res.redirect('/manager/view');
@@ -22,10 +23,11 @@ router.post('/signin', function(req, res) {
         if (!err) {
             if (rows.length) {
                 req.session.store_id = rows[0].store_id;
+                req.session.store_name = rows[0].name;
                 res.redirect('/manager/view')
             } else {
                 console.log('not match')
-                res.send();
+                res.redirect('/manager')
             }
         } else console.error(err)
     })
@@ -38,6 +40,7 @@ router.get('/view', function(req, res) {
         Store.loadOne(req.session.store_id, function(err, data) {
             res.render('manager-view', {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 name: data.name
             });
         });
@@ -51,6 +54,7 @@ router.get('/view/order', function(req, res) {
         Store.loadOne(req.session.store_id, function(err, data) {
             res.render('manager-view-order', {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 name: data.name
             });
         });
@@ -83,6 +87,7 @@ router.get('/view/menus', function(req, res) {
         Store.loadOne(req.session.store_id, function(err, data) {
             res.render('manager-view-menus', {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 name: data.name
             });
         });
@@ -116,6 +121,7 @@ router.get('/view/coupon', function(req, res) {
             Coupon.loadByStore(req.session.store_id, function(err, rows) {
                 res.render('manager-view-coupon', {
                     username: req.session.username,
+                    store_name: req.session.store_name,
                     name: data.name,
                     coupons: rows
                 });

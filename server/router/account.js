@@ -11,6 +11,7 @@ function routeHandler(req, res, view, data) {
         Customer.loadAccountWithAddress(req.session.username, function(err, userData) {
             res.render(view, {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 user: userData,
                 view,
                 data

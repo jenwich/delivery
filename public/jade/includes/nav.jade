@@ -28,6 +28,16 @@ nav.navbar.navbar-inverse.navbar-default.navbar-fixed-top
                             a(href='/account') My Account
                     li
                         a(href='/signout') Sign out
+            else if store_name
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        p.navbar-text Welcome, 
+                            b #{store_name}
+                    block nav-account-store
+                        li
+                            a(href='/manager/view') My Store
+                    li
+                        a(href='/signout') Sign out
             else 
                 ul.nav.navbar-nav.navbar-right
                     li

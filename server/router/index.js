@@ -6,6 +6,7 @@ router.get('/', function(req, res) {
     Menu_Review.getPopularMenus(function(err, data) {
         res.render('index', {
             username: req.session.username,
+            store_name: req.session.store_name,
             menus: data
         });
     });

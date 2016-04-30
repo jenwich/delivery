@@ -9,7 +9,8 @@ router.get('/', function(req, res) {
         res.redirect('/manager');
     } else {
         res.render('signin', {
-            username: req.session.username
+            username: req.session.username,
+            store_name: req.session.store_name
         });
     }
 })

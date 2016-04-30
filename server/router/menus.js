@@ -9,7 +9,8 @@ var Coupon = require('../models/Coupon');
 
 router.get('/', function(req, res) {
     res.render('menus', {
-        username: req.session.username
+        username: req.session.username,
+        store_name: req.session.store_name
     });
 })
 

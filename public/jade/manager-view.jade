@@ -2,7 +2,13 @@ extends ./layouts/layout.jade
 
 block title
     title Store Manager
-
+    
+block nav-account-store
+    li.active
+      a(href='/account')
+        | My Store 
+        span.sr-only (current)
+        
 block content
     .container
         .row
@@ -14,7 +20,5 @@ block content
                     a.list-group-item(href="/manager/view/order") Order
                     a.list-group-item(href="/manager/view/menus") Menus
                     a.list-group-item(href="/manager/view/coupon") Coupon
-                a.btn.btn-default(href="/signout") Sign Out
             .col-md-9
                 block manager-content
-                

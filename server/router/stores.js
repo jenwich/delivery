@@ -10,6 +10,7 @@ router.get('/', function(req, res) {
     Store.loadAll(function(err, rows) {
         res.render('stores', {
             username: req.session.username,
+            store_name: req.session.store_name,
             data: rows
         });
     })
@@ -23,6 +24,7 @@ router.get('/:store_id', function(req, res) {
             })
             res.render('stores-view', {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 data: data,
                 reviews: rows
             });
@@ -56,6 +58,7 @@ router.get('/menu/:menu_id', function(req, res) {
             })
             res.render('stores-menu', {
                 username: req.session.username,
+                store_name: req.session.store_name,
                 data: data,
                 reviews: rows
             });
