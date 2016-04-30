@@ -15,24 +15,24 @@ export default class Orders extends React.Component {
             <div className="panel panel-default">
                 <div className="panel-body">
                     <h3>Order#{this.props.order_id}</h3>
-                    <p>Process: {this.props.process}</p>
-                    <p>Store: {this.props.store_id}</p>
-                    <p>Address: {this.props.address}</p>
-                    <p>Menus:</p>
+                    <p><b>Process: </b>{this.props.process} (ordered on {this.props.time_ordered})</p>
+                    <p><b>Customer: </b>{this.props.customer}</p>
+                    <p><b>Address: </b>{this.props.address}</p>
+                    <p><b>Menus:</b></p>
                     <ul>
                         {
                             this.props.menus.map(menu => {
                                 return (
                                     <li key={menu.menu_id}>
                                         <span>{menu.name}</span>
-                                        <span> (*{menu.amount})</span>
+                                        <span> (x{menu.amount})</span>
                                         <span> (${(menu.price * menu.amount).toFixed(2)})</span>
                                     </li>
                                 )
                             })
                         }
                     </ul>
-                    <p>Price: ${ this.props.price } (discount: ${this.props.discount})</p>
+                    <p><b>Price: </b>${ this.props.price } (discount: ${this.props.discount})</p>
                     <p>
                         { button }
                     </p>

@@ -6,11 +6,27 @@ block account-content
             .panel.panel-default
                 .panel-body
                     h3 Order##{item.order_id}
-                    p Store: #{item.store_id}
-                    p Address: #{item.address}
-                    p Menus:
+                    p
+                        b Ordered on: 
+                        span #{item.time_ordered}
+                    p
+                        b Sent on: 
+                        span #{item.time_cooked}
+                    p 
+                        b Received on: 
+                        span #{item.time_received}
+                    p 
+                        b Store: 
+                        span #{item.store_name}
+                    p 
+                        b Address: 
+                        span #{item.address}
+                    p 
+                        b Menus:
                         ul: for menu in item.menus
-                            li #{menu.name} (*#{menu.amount}) ($#{menu.price*menu.amount})
-                    p Price: $#{item.price} (discount: $#{item.discount})
+                            li #{menu.name} (x#{menu.amount}) ($#{menu.price*menu.amount})
+                    p 
+                        b Price: 
+                        span $#{item.price} (discount: $#{item.discount})
 
     

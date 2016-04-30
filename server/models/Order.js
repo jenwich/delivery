@@ -8,13 +8,29 @@ const LOAD_ORDER = `SELECT * FROM Order_ WHERE order_id = ?`;
 const LOAD_MENUS =
     `SELECT menu_id, amount FROM Order_Menu WHERE order_id = ?`;
 
+const LOAD_BY_CUSTOMER =
+    `SELECT order_id, Store.name AS store_name, Order_.address, price, discount,
+        UNIX_TIMESTAMP(time_ordered) AS time_ordered,
+        UNIX_TIMESTAMP(time_cooked) AS time_cooked,
+        UNIX_TIMESTAMP(time_received) AS time_received
+    FROM Order_ INNER JOIN Store
+        ON Order_.store_id = Store.store_id
+    WHERE customer = ? ORDER BY order_id DESC`
+
 const LOAD_BY_CUSTOMER_MENU =
     `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
     FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
     INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
     WHERE Order_.customer = ?`
 
-const LOAD_BY_CUSTOMER = `SELECT * FROM Order_ WHERE customer = ? ORDER BY order_id DESC`
+const LOAD_BY_STORE =
+    `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
+
+const LOAD_BY_STORE_MENU =
+    `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
+    FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
+    INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
+    WHERE Order_.store_id = ?`
 
 const CREATE_ORDER =
     `INSERT INTO Order_ (store_id, customer, address, price, discount, time_ordered)
@@ -25,14 +41,6 @@ const COOK_ORDER =
 
 const RECEIVE_ORDER =
     `UPDATE Order_ SET time_received = ? WHERE order_id = ?`;
-
-const LOAD_BY_STORE = `SELECT * FROM Order_ WHERE store_id = ? ORDER BY order_id DESC`;
-
-const LOAD_BY_STORE_MENU =
-    `SELECT Order_Menu.order_id, Order_Menu.menu_id, Order_Menu.amount, Menu.name, Menu.price
-    FROM Order_ INNER JOIN Order_Menu ON Order_.order_id = Order_Menu.order_id
-    INNER JOIN Menu ON Order_Menu.menu_id = Menu.menu_id
-    WHERE Order_.store_id = ?`
 
 function loadOne(id, callback) {
     connection.query(LOAD_ORDER, [id], callback);
@@ -54,6 +62,10 @@ function checkProcess(data) {
     else return "ordered"
 }
 
+function changeTimeFormat(time) {
+    return time? moment.unix(time, DATE_FORMAT).format('D MMM YYYY HH:mm'): time;
+}
+
 function loadByCustomer(customer, callback) {
     connection.query(LOAD_BY_CUSTOMER, [customer], function(err, rows) {
         if (!err) {
@@ -61,6 +73,9 @@ function loadByCustomer(customer, callback) {
             data.forEach(function(row) {
                 row.process = checkProcess(row);
                 row.menus = [];
+                row.time_ordered = changeTimeFormat(row.time_ordered);
+                row.time_cooked = changeTimeFormat(row.time_cooked);
+                row.time_received = changeTimeFormat(row.time_received);
             })
             loadByCustomerWithMenu(customer, function(err, rows) {
                 if (!err) {
@@ -91,6 +106,9 @@ function loadByStore(store_id, callback) {
             data.forEach(function(row) {
                 row.process = checkProcess(row);
                 row.menus = [];
+                row.time_ordered = changeTimeFormat(row.time_ordered);
+                row.time_cooked = changeTimeFormat(row.time_cooked);
+                row.time_received = changeTimeFormat(row.time_received);
             })
             loadByStoreWithMenu(store_id, function(err, rows) {
                 if (!err) {
