@@ -1,6 +1,8 @@
 
 var router = require('express').Router();
 var Customer = require('../models/Customer');
+var moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 router.get('/', function(req, res) {
     if (req.session.username) {
@@ -26,7 +28,7 @@ router.post('/req', function(req, res) {
                 message = "success";
                 redirect = '/account';
                 req.session.username = req.body.username;
-                console.log(req.session.username, "logged in");
+                console.log(`[${moment().format(DATE_FORMAT)}]`, req.session.username, "logged in");
             } else {
                 message = "Username or password unmatch";
             }

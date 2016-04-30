@@ -1,6 +1,8 @@
 
 var router = require('express').Router();
 var Menu_Review = require('../models/Menu_Review')
+var moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 router.get('/', function(req, res) {
     Menu_Review.getPopularMenus(function(err, data) {
@@ -23,12 +25,12 @@ router.use('/api', require('./api'));
 
 router.get('/signout', function(req, res) {
     if (req.session.username) {
-        console.log(req.session.username, "logged out");
+        console.log(`[${moment().format(DATE_FORMAT)}]`, req.session.username, "logged out");
         req.session.destroy(function() {
             res.redirect('/signin')
         });
-    } else if (req.session.store_id) {
-        console.log("store", req.session.store_id, "logged out");
+    } else if (req.session.store_name) {
+        console.log(`[${moment().format(DATE_FORMAT)}]`, req.session.store_name, "logged out");
         req.session.destroy(function() {
             res.redirect('/manager')
         });

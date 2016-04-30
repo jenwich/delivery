@@ -6,6 +6,8 @@ var Menu = require('../models/Menu');
 var Cart = require('../models/Cart');
 var Order = require('../models/Order');
 var Coupon = require('../models/Coupon');
+var moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 router.get('/', function(req, res) {
     res.render('menus', {
@@ -95,7 +97,8 @@ router.post('/purchase', function(req, res) {
                         } else {
                             Order.createOrder(data, function(err, rows) {
                                 if (!err) {
-                                    Cart.clearCart(req.session.username, function(err, rows) {
+                                    Cart.clearCart(req.session.username, function(err, rows2) {
+                                        console.log(`[${moment().format(DATE_FORMAT)}]`, req.session.username, `send order (order#${rows.insertId})`)
                                         res.send({ message: "success", redirect: "/account/order" })
                                     });
                                 } else console.error(err);

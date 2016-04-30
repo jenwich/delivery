@@ -3,6 +3,8 @@ var router = require('express').Router();
 var Customer = require('../models/Customer');
 var Order = require('../models/Order');
 var Coupon = require('../models/Coupon');
+var moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 function routeHandler(req, res, view, data) {
     if (!req.session.username) {
@@ -49,7 +51,10 @@ router.post('/order/recieve', function(req, res) {
         else {
             Order.loadByCustomer(req.session.username, function(err, data) {
                 if (err) console.error(err);
-                else res.send(data);
+                else {
+                    console.log(`[${moment().format(DATE_FORMAT)}]`, `order#${req.body.order_id} recieved`)
+                    res.send(data);
+                }
             });
         }
     });

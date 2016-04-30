@@ -4,6 +4,8 @@ var Store = require('../models/Store');
 var Order = require('../models/Order');
 var Menu = require('../models/Menu');
 var Coupon = require('../models/Coupon');
+var moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 router.get('/', function(req, res) {
     if (req.session.username) {
@@ -24,9 +26,10 @@ router.post('/signin', function(req, res) {
             if (rows.length) {
                 req.session.store_id = rows[0].store_id;
                 req.session.store_name = rows[0].name;
+                console.log(`[${moment().format(DATE_FORMAT)}]`, req.session.store_name, 'logged in');
                 res.redirect('/manager/view')
             } else {
-                console.log('not match')
+                console.log(`[${moment().format(DATE_FORMAT)}] loggin fail (${req.body.username})`);
                 res.redirect('/manager')
             }
         } else console.error(err)
@@ -74,7 +77,10 @@ router.post('/view/order/cook', function(req, res) {
         else {
             Order.loadByStore(req.session.store_id, function(err, data) {
                 if (err) console.error(err);
-                else res.send(data);
+                else {
+                    console.log(`[${moment().format(DATE_FORMAT)}]`, `order#${req.body.order_id} cooked`)
+                    res.send(data);
+                }
             });
         }
     });

@@ -1,6 +1,7 @@
 
 var moment = require('moment')
 var connection = require('./db').connection();
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 const LOAD_ORDER = `SELECT * FROM Order_ WHERE order_id = ?`;
 
@@ -143,12 +144,12 @@ function createOrder(values, callback) {
         values.address,
         values.price,
         values.discount,
-        moment().format('YYYY-MM-DD HH:mm:ss')
+        moment().format(DATE_FORMAT)
     ];
     connection.query(CREATE_ORDER, params, function(err, rows) {
         if (!err) {
             var order_id = rows.insertId;
-            insertOrderMenu({ order_id, menus: values.menus }, function(err, rows) {
+            insertOrderMenu({ order_id, menus: values.menus }, function(err, rows2) {
                 if (!err) {
                     callback(err, rows)
                 } else callback(err);
