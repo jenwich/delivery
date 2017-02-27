@@ -1,6 +1,7 @@
 
 var moment = require('moment')
-var connection = require('./db').connection();
+var query = require('./db').query;
+
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 const LOAD_ORDER = `SELECT * FROM Order_ WHERE order_id = ?`;
@@ -47,15 +48,15 @@ const RECEIVE_ORDER =
     `UPDATE Order_ SET time_received = ? WHERE order_id = ?`;
 
 function loadOne(id, callback) {
-    connection.query(LOAD_ORDER, [id], callback);
+    query(LOAD_ORDER, [id], callback);
 }
 
 function loadMenus(id, callback) {
-    connection.query(LOAD_MENUS, [id], callback);
+    query(LOAD_MENUS, [id], callback);
 }
 
 function loadByCustomerWithMenu(customer, callback) {
-    connection.query(LOAD_BY_CUSTOMER_MENU, [customer], function(err, rows) {
+    query(LOAD_BY_CUSTOMER_MENU, [customer], function(err, rows) {
         callback(err, rows)
     });
 }
@@ -71,7 +72,7 @@ function changeTimeFormat(time) {
 }
 
 function loadByCustomer(customer, callback) {
-    connection.query(LOAD_BY_CUSTOMER, [customer], function(err, rows) {
+    query(LOAD_BY_CUSTOMER, [customer], function(err, rows) {
         if (!err) {
             var data = rows;
             data.forEach(function(row) {
@@ -98,13 +99,13 @@ function loadByCustomer(customer, callback) {
 }
 
 function loadByStoreWithMenu(store_id, callback) {
-    connection.query(LOAD_BY_STORE_MENU, [store_id], function(err, rows) {
+    query(LOAD_BY_STORE_MENU, [store_id], function(err, rows) {
         callback(err, rows)
     });
 }
 
 function loadByStore(store_id, callback) {
-    connection.query(LOAD_BY_STORE, [store_id], function(err, rows) {
+    query(LOAD_BY_STORE, [store_id], function(err, rows) {
         if (!err) {
             var data = rows;
             data.forEach(function(row) {
@@ -155,7 +156,7 @@ function insertOrderMenu(values, callback) {
         sql += `(${values.order_id}, ${item.menu_id}, ${item.amount})`;
     });
     if (values.menus.length > 0) {
-        connection.query(sql, callback);
+        query(sql, callback);
     } else callback(null, [])
 }
 
@@ -168,7 +169,7 @@ function createOrder(values, callback) {
         values.discount,
         moment().format(DATE_FORMAT)
     ];
-    connection.query(CREATE_ORDER, params, function(err, rows) {
+    query(CREATE_ORDER, params, function(err, rows) {
         if (!err) {
             var order_id = rows.insertId;
             insertOrderMenu({ order_id, menus: values.menus }, function(err, rows2) {
@@ -182,12 +183,12 @@ function createOrder(values, callback) {
 
 function cookOrder(order_id, callback) {
     var time = moment().format('YYYY-MM-DD HH:mm:ss');
-    connection.query(COOK_ORDER, [time, order_id], callback);
+    query(COOK_ORDER, [time, order_id], callback);
 }
 
 function receiveOrder(order_id, callback) {
     var time = moment().format('YYYY-MM-DD HH:mm:ss');
-    connection.query(RECEIVE_ORDER, [time, order_id], callback);
+    query(RECEIVE_ORDER, [time, order_id], callback);
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 
 var moment = require('moment')
 var connection = require('./db').connection();
+var query = require('./db').query
 var Customer = require('./Customer');
 var Menu = require('./Menu');
 
@@ -31,11 +32,11 @@ const SUM_OF_MENUS =
     LIMIT 10`
 
 function loadByMenu(menu_id, callback) {
-    connection.query(LOAD_BY_MENU, [menu_id], callback);
+    query(LOAD_BY_MENU, [menu_id], callback);
 }
 
 function loadByCustomer(customer, callback) {
-    connection.query(LOAD_BY_CUSTOMER, [customer], callback);
+    query(LOAD_BY_CUSTOMER, [customer], callback);
 }
 
 function insertReview(values, callback) {
@@ -50,11 +51,11 @@ function insertReview(values, callback) {
         values.comment,
         time
     ];
-    connection.query(INSERT, arr, callback);
+    query(INSERT, arr, callback);
 }
 
 function getPopularMenus(callback) {
-    connection.query(SUM_OF_MENUS, callback);
+    query(SUM_OF_MENUS, callback);
 }
 
 module.exports = {

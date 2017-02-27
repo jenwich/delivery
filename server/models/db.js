@@ -16,7 +16,7 @@ function initializeConnection(config) {
             }
         });
     }
-    var connection = mysql.createConnection(config);
+    connection = mysql.createConnection(config);
     addDisconnectHandler(connection);
     connection.connect(function(err) {
         if (err) console.log(err.stack);
@@ -24,7 +24,6 @@ function initializeConnection(config) {
             console.log("Database connected");
         }
     });
-    return connection;
 }
 
 module.exports = {
@@ -32,7 +31,11 @@ module.exports = {
         return connection;
     },
     createConnection: function(config) {
-        connection = initializeConnection(config);
+        initializeConnection(config);
         return connection;
     },
+    query: function() {
+        connection.query.apply(connection, arguments)
+    }
 }
+

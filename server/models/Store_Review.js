@@ -1,6 +1,6 @@
 
 var moment = require('moment')
-var connection = require('./db').connection();
+var query = require('./db').query;
 var Customer = require('./Customer');
 
 const LOAD_BY_STORE =
@@ -17,11 +17,11 @@ const INSERT =
     ON DUPLICATE KEY UPDATE score = ?, comment = ?, time_review = ?`;
 
 function loadByStore(store_id, callback) {
-    connection.query(LOAD_BY_STORE, [store_id], callback);
+    query(LOAD_BY_STORE, [store_id], callback);
 }
 
 function loadByCustomer(customer, callback) {
-    connection.query(LOAD_BY_CUSTOMER, [customer], callback);
+    query(LOAD_BY_CUSTOMER, [customer], callback);
 }
 
 function insertReview(values, callback) {
@@ -36,7 +36,7 @@ function insertReview(values, callback) {
         values.comment,
         time
     ];
-    connection.query(INSERT, arr, callback);
+    query(INSERT, arr, callback);
 }
 
 module.exports = {

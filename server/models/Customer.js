@@ -1,6 +1,6 @@
 
 var crypto = require('crypto')
-var connection = require('./db').connection();
+var query = require('./db').query;
 
 const CHECK_ACCOUNT = 'SELECT * FROM Customer WHERE username = ? AND password = ?'
 
@@ -26,17 +26,17 @@ const ADD_BALANCE = 'UPDATE Customer SET balance = balance + ? WHERE username = 
 
 function checkAccount(values, callback) {
     var password = crypto.createHash('md5').update(values.password).digest('hex');
-    connection.query(CHECK_ACCOUNT, [values.username, password], callback);
+    query(CHECK_ACCOUNT, [values.username, password], callback);
 }
 
 function loadAccount(username, callback) {
-    connection.query(LOAD_ACCOUNT, [username], function(err, rows) {
+    query(LOAD_ACCOUNT, [username], function(err, rows) {
         callback(err, rows[0])
     });
 }
 
 function loadAddress(username, callback) {
-    connection.query(LOAD_ADDRESS, [username], callback);
+    query(LOAD_ADDRESS, [username], callback);
 }
 
 function loadAccountWithAddress(username, callback) {
@@ -61,7 +61,7 @@ function insertAddress(values, callback) {
         sql += `('${ values.username }', '${ item }')`;
     });
     if (values.address.length > 0) {
-        connection.query(sql, callback);
+        query(sql, callback);
     } else callback(null, [])
 }
 
@@ -74,7 +74,7 @@ function createAccount(data, callback) {
         data.lastName,
         0
     ];
-    connection.query(INSERT_ACCOUNT, arr, function(err, rows) {
+    query(INSERT_ACCOUNT, arr, function(err, rows) {
         if (!err) {
             insertAddress({ username: data.username, address: data.address }, function(err, rows) {
                 if (!err) {
@@ -86,11 +86,11 @@ function createAccount(data, callback) {
 }
 
 function decreaseBalance_(username, price, callback) {
-    connection.query(DECREASE_BALANCE, [price, username], callback)
+    query(DECREASE_BALANCE, [price, username], callback)
 }
 
 function decreaseBalance(username, price, callback) {
-    connection.query(LOAD_BALANCE, [username], function(err, rows) {
+    query(LOAD_BALANCE, [username], function(err, rows) {
         if (!err) {
             var balance = rows[0].balance;
             if (price > balance) {
@@ -103,7 +103,7 @@ function decreaseBalance(username, price, callback) {
 }
 
 function loadBalance(username, callback) {
-    connection.query(LOAD_BALANCE, [username], function(err, rows) {
+    query(LOAD_BALANCE, [username], function(err, rows) {
         if (!err) {
             if (rows.length) {
                 callback(err, rows[0].balance)
@@ -113,7 +113,7 @@ function loadBalance(username, callback) {
 }
 
 function addBalance(username, amount, callback) {
-    connection.query(ADD_BALANCE, [amount, username], callback);
+    query(ADD_BALANCE, [amount, username], callback);
 }
 
 module.exports = {
